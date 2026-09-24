@@ -1,0 +1,519 @@
+
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar órdenes | Reparatodo</title>
+    <link rel="stylesheet" href="/static/css/gestion.css" th:href="@{css/gestion.css}">
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- BARRA LATERAL -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            Repara<span>todo</span>
+        </div>
+
+        <div class="menu-title">Menú principal</div>
+
+        <nav class="menu">
+            <a href="#">📊 Dashboard</a>
+            <a th:href="@{/crear}">📝 Crear orden</a>
+            <a href="#" class="active">🔧 Gestionar órdenes</a>
+            <a href="#">👥 Clientes</a>
+            <a href="#">⚙️ Configuración</a>
+        </nav>
+
+        <div class="menu-title">Sistema</div>
+
+        <nav class="menu">
+            <a href="#">📄 Reportes</a>
+            <a href="#">🚪 Cerrar sesión</a>
+        </nav>
+
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main">
+
+        <!-- CABECERA -->
+        <header class="topbar">
+            <div>
+                <h1>Gestionar órdenes</h1>
+                <p>Consulta y seguimiento de las reparaciones del taller.</p>
+            </div>
+
+            <div class="user">
+                👤 Técnico / Administrador
+            </div>
+        </header>
+
+        <!-- TARJETAS -->
+        <section class="cards">
+
+            <div class="card blue">
+                <div class="card-title">Total de órdenes</div>
+                <div class="card-number" id="totalOrders">24</div>
+                <small>Órdenes registradas</small>
+            </div>
+
+            <div class="card orange">
+                <div class="card-title">En diagnóstico</div>
+                <div class="card-number" id="diagnosisOrders">6</div>
+                <small>Pendientes de diagnóstico</small>
+            </div>
+
+            <div class="card green">
+                <div class="card-title">En reparación</div>
+                <div class="card-number" id="repairOrders">10</div>
+                <small>Dispositivos en reparación</small>
+            </div>
+
+            <div class="card red">
+                <div class="card-title">Alta prioridad</div>
+                <div class="card-number" id="highPriority">4</div>
+                <small>Requieren atención</small>
+            </div>
+
+        </section>
+
+        <!-- TABLA DE ÓRDENES -->
+        <section class="orders-box">
+
+            <div class="orders-header">
+                <div>
+                    <h2>Órdenes de reparación</h2>
+                    <p>Administra el estado y la información de cada dispositivo.</p>
+                </div>
+
+                <button class="btn-primary" onclick="window.location.href='/crear-orden'">
+                    + Nueva orden
+                </button>
+            </div>
+
+            <!-- FILTROS -->
+            <div class="filters">
+
+                <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="Buscar por cliente o dispositivo..."
+                        oninput="filterOrders()"
+                >
+
+                <select id="statusFilter" onchange="filterOrders()">
+                    <option value="">Todos los estados</option>
+                    <option value="Recibido">Recibido</option>
+                    <option value="En diagnóstico">En diagnóstico</option>
+                    <option value="En reparación">En reparación</option>
+                    <option value="Listo para entregar">Listo para entregar</option>
+                    <option value="Entregado">Entregado</option>
+                </select>
+
+                <select id="priorityFilter" onchange="filterOrders()">
+                    <option value="">Todas las prioridades</option>
+                    <option value="Alta">Alta</option>
+                    <option value="Media">Media</option>
+                    <option value="Baja">Baja</option>
+                </select>
+
+                <button class="btn-filter" onclick="clearFilters()">
+                    Limpiar
+                </button>
+
+            </div>
+
+            <!-- TABLA -->
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Cliente</th>
+                        <th>Dispositivo</th>
+                        <th>Fecha</th>
+                        <th>Prioridad</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="ordersTable">
+
+                    <tr
+                            data-client="Carlos Ramirez"
+                            data-device="Laptop Lenovo"
+                            data-status="En reparación"
+                            data-priority="Alta"
+                            data-id="ORD-001"
+                    >
+                        <td class="order-id">ORD-001</td>
+                        <td class="client">Carlos Ramirez</td>
+                        <td class="device">Laptop Lenovo</td>
+                        <td class="date">24/09/2026</td>
+                        <td>
+                            <span class="priority high">● Alta</span>
+                        </td>
+                        <td>
+                            <span class="status repair">En reparación</span>
+                        </td>
+                        <td>
+                            <button
+                                    class="btn-detail"
+                                    onclick="openModal(this)"
+                            >
+                                Ver detalle
+                            </button>
+                        </td>
+                    </tr>
+
+                    <tr
+                            data-client="Maria Gonzalez"
+                            data-device="Celular Samsung"
+                            data-status="En diagnóstico"
+                            data-priority="Media"
+                            data-id="ORD-002"
+                    >
+                        <td class="order-id">ORD-002</td>
+                        <td class="client">Maria Gonzalez</td>
+                        <td class="device">Celular Samsung</td>
+                        <td class="date">24/09/2026</td>
+                        <td>
+                            <span class="priority medium">● Media</span>
+                        </td>
+                        <td>
+                            <span class="status diagnosis">En diagnóstico</span>
+                        </td>
+                        <td>
+                            <button
+                                    class="btn-detail"
+                                    onclick="openModal(this)"
+                            >
+                                Ver detalle
+                            </button>
+                        </td>
+                    </tr>
+
+                    <tr
+                            data-client="Juan Perez"
+                            data-device="Computador HP"
+                            data-status="Listo para entregar"
+                            data-priority="Baja"
+                            data-id="ORD-003"
+                    >
+                        <td class="order-id">ORD-003</td>
+                        <td class="client">Juan Perez</td>
+                        <td class="device">Computador HP</td>
+                        <td class="date">23/09/2026</td>
+                        <td>
+                            <span class="priority low">● Baja</span>
+                        </td>
+                        <td>
+                            <span class="status ready">Listo para entregar</span>
+                        </td>
+                        <td>
+                            <button
+                                    class="btn-detail"
+                                    onclick="openModal(this)"
+                            >
+                                Ver detalle
+                            </button>
+                        </td>
+                    </tr>
+
+                    <tr
+                            data-client="Laura Martinez"
+                            data-device="iPhone 13"
+                            data-status="Recibido"
+                            data-priority="Alta"
+                            data-id="ORD-004"
+                    >
+                        <td class="order-id">ORD-004</td>
+                        <td class="client">Laura Martinez</td>
+                        <td class="device">iPhone 13</td>
+                        <td class="date">23/09/2026</td>
+                        <td>
+                            <span class="priority high">● Alta</span>
+                        </td>
+                        <td>
+                            <span class="status received">Recibido</span>
+                        </td>
+                        <td>
+                            <button
+                                    class="btn-detail"
+                                    onclick="openModal(this)"
+                            >
+                                Ver detalle
+                            </button>
+                        </td>
+                    </tr>
+
+                    <tr
+                            data-client="Pedro Torres"
+                            data-device="PlayStation 5"
+                            data-status="En reparación"
+                            data-priority="Media"
+                            data-id="ORD-005"
+                    >
+                        <td class="order-id">ORD-005</td>
+                        <td class="client">Pedro Torres</td>
+                        <td class="device">PlayStation 5</td>
+                        <td class="date">22/09/2026</td>
+                        <td>
+                            <span class="priority medium">● Media</span>
+                        </td>
+                        <td>
+                            <span class="status repair">En reparación</span>
+                        </td>
+                        <td>
+                            <button
+                                    class="btn-detail"
+                                    onclick="openModal(this)"
+                            >
+                                Ver detalle
+                            </button>
+                        </td>
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <p id="noResults"
+               style="display:none; text-align:center; padding:25px; color:#64748b;">
+                No se encontraron órdenes.
+            </p>
+
+        </section>
+
+    </main>
+
+</div>
+
+<!-- MODAL DE DETALLE -->
+<div class="modal" id="detailModal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <h2>Detalle de la orden</h2>
+
+            <button class="close" onclick="closeModal()">
+                &times;
+            </button>
+        </div>
+
+        <div class="detail-row">
+            <strong>Número de orden</strong>
+            <span id="modalId"></span>
+        </div>
+
+        <div class="detail-row">
+            <strong>Cliente</strong>
+            <span id="modalClient"></span>
+        </div>
+
+        <div class="detail-row">
+            <strong>Dispositivo</strong>
+            <span id="modalDevice"></span>
+        </div>
+
+        <div class="detail-row">
+            <strong>Fecha de creación</strong>
+            <span id="modalDate"></span>
+        </div>
+
+        <div class="detail-row">
+            <strong>Prioridad</strong>
+            <span id="modalPriority"></span>
+        </div>
+
+        <div class="detail-row">
+            <strong>Falla reportada</strong>
+            <span>El dispositivo no enciende correctamente.</span>
+        </div>
+
+        <div class="detail-row">
+            <strong>Observaciones</strong>
+            <span>Revisar componentes internos y realizar diagnóstico.</span>
+        </div>
+
+        <label for="modalStatus">Actualizar estado</label>
+
+        <select id="modalStatus">
+            <option value="Recibido">Recibido</option>
+            <option value="En diagnóstico">En diagnóstico</option>
+            <option value="En reparación">En reparación</option>
+            <option value="Listo para entregar">Listo para entregar</option>
+            <option value="Entregado">Entregado</option>
+        </select>
+
+        <button class="btn-save" onclick="saveStatus()">
+            Guardar cambio
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+
+    let selectedRow = null;
+
+    // BUSCAR Y FILTRAR ÓRDENES
+    function filterOrders() {
+
+        const search = document
+            .getElementById("searchInput")
+            .value
+            .toLowerCase();
+
+        const status = document
+            .getElementById("statusFilter")
+            .value;
+
+        const priority = document
+            .getElementById("priorityFilter")
+            .value;
+
+        const rows = document.querySelectorAll("#ordersTable tr");
+
+        let visible = 0;
+
+        rows.forEach(row => {
+
+            const client = row.dataset.client.toLowerCase();
+            const device = row.dataset.device.toLowerCase();
+
+            const matchesSearch =
+                client.includes(search) ||
+                device.includes(search);
+
+            const matchesStatus =
+                !status ||
+                row.dataset.status === status;
+
+            const matchesPriority =
+                !priority ||
+                row.dataset.priority === priority;
+
+            const show =
+                matchesSearch &&
+                matchesStatus &&
+                matchesPriority;
+
+            row.style.display = show ? "" : "none";
+
+            if (show) visible++;
+
+        });
+
+        document.getElementById("noResults").style.display =
+            visible === 0 ? "block" : "none";
+
+    }
+
+    // LIMPIAR FILTROS
+    function clearFilters() {
+
+        document.getElementById("searchInput").value = "";
+        document.getElementById("statusFilter").value = "";
+        document.getElementById("priorityFilter").value = "";
+
+        filterOrders();
+
+    }
+
+    // ABRIR MODAL
+    function openModal(button) {
+
+        selectedRow = button.closest("tr");
+
+        document.getElementById("modalId").textContent =
+            selectedRow.dataset.id;
+
+        document.getElementById("modalClient").textContent =
+            selectedRow.dataset.client;
+
+        document.getElementById("modalDevice").textContent =
+            selectedRow.dataset.device;
+
+        document.getElementById("modalDate").textContent =
+            selectedRow.querySelector(".date").textContent;
+
+        document.getElementById("modalPriority").textContent =
+            selectedRow.dataset.priority;
+
+        document.getElementById("modalStatus").value =
+            selectedRow.dataset.status;
+
+        document.getElementById("detailModal").style.display = "flex";
+
+    }
+
+    // CERRAR MODAL
+    function closeModal() {
+
+        document.getElementById("detailModal").style.display = "none";
+
+    }
+
+    // GUARDAR CAMBIO DE ESTADO (PROTOTIPO)
+    function saveStatus() {
+
+        if (!selectedRow) return;
+
+        const newStatus =
+            document.getElementById("modalStatus").value;
+
+        selectedRow.dataset.status = newStatus;
+
+        const statusElement =
+            selectedRow.querySelector(".status");
+
+        statusElement.textContent = newStatus;
+
+        statusElement.className = "status";
+
+        const classes = {
+            "Recibido": "received",
+            "En diagnóstico": "diagnosis",
+            "En reparación": "repair",
+            "Listo para entregar": "ready",
+            "Entregado": "delivered"
+        };
+
+        statusElement.classList.add(classes[newStatus]);
+
+        closeModal();
+
+        filterOrders();
+
+        alert("Estado actualizado en el prototipo.");
+
+    }
+
+    // CERRAR AL HACER CLIC FUERA DEL MODAL
+    window.addEventListener("click", function(event) {
+
+        const modal = document.getElementById("detailModal");
+
+        if (event.target === modal) {
+            closeModal();
+        }
+
+    });
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width , initial-scale=1.0">
+    <title>Reparatodo</title>
+    <link rel="stylesheet" th:href="@{css/orden.css}"/>
+</head>
+<body>
+<main class="main">
+    <section class="home container" id="home">
+        <div class="swiper home-swiper"></div>
+        <div class="swiper-wrapper">
+            <section>
+                <div class="homecont grid">
+                    <div class="homedata">
+                        <h1 class="hometile">Crear Orden</h1>
+                        <p class="homedes">
+                            Datos cliente
+                        </p>
+                        <form th:action="@{/crearorden}" method="post">
+                            <div class="orden">
+                                <input type="text" name="nombre" placeholder="Nombre del cliente" required id="cliente">
+                                <label for="cliente">Nombre del cliente</label>
+                                <span></span>
+                            </div>
+                            <div class="orden">
+                                <input type="text" name="apellido" placeholder="Apellido del cliente" required id="apellido">
+                                <label for="apellido">Apellido del cliente</label>
+                                <span></span>
+                            </div>
+                            <div class="orden">
+                                <input type="text" name="celular" placeholder="Telefono del cliente" required id="telefono">
+                                <label for="telefono">Telefono del cliente</label>
+                                <span></span>
+                            </div>
+                            <div class="orden">
+                                <input type="number" name="cedula" placeholder="Cedula del cliente" required id="cedula">
+                                <label for="cedula">Cedula del cliente</label>
+                                <span></span>
+                            </div>
+                            <p class="homedes">
+                                Datos del equipo
+                            </p>
+                            <div class="orden">
+                                <input type="text" name="tipoEquipo" placeholder="Tipo de equipo" required id="tipoEquipo">
+                                <label for="tipoEquipo">Tipo de equipo</label>
+                                <span></span>
+                            </div>
+                            <div class="orden">
+                                <input type="text" name="codigo" placeholder="Código del equipo" required id="codigo">
+                                <label for="codigo">Código del equipo</label>
+                                <span></span>
+                            </div>
+                            <div class="orden">
+                                <input type="text" name="dano" placeholder="Daño del equipo" required id="daño">
+                                <label for="daño">Daño del equipo</label>
+                                <span></span>
+                            </div>
+                            <div class="orden">
+                                <input type="text" name="observaciones" placeholder="Observaciones del equipo" required id="observaciones">
+                                <label for="observaciones">Observaciones del equipo</label>
+                                <span></span>
+                            </div>
+                            <div class="orden">
+                                <label for="fecha">
+                                </label><input type="date" name="fecha" placeholder="Fecha de entrada" id="fecha" required >
+                                <label >Fecha de entrada</label>
+                                <span></span>
+                            </div>
+                            <div class="orden">
+                                <label for="estado">Estado del equipo</label>
+                                <select name="estado" id="estado" required>
+                                    <option value="" disabled selected>Seleccione el estado del equipo</option>
+                                    <option value="PENDIENTE">Pendiente</option>
+                                    <option value="EN_REPARACION">Revisión</option>
+                                    <option value="REPARADO">Reparación</option>
+                                    <option value="ENTREGADO">Reparación</option>
+                                    <option value="CANCELADO">Reparación</option>
+                                </select>
+                            </div>
+                            <input type="submit" value="Crear Orden" class="button">
+                        </form>
+                    </div>
+                </div>
+    </section>
+        </div>
+    </section>
+</main>
+
+</body>
+</html>

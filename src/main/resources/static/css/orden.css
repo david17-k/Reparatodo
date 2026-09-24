@@ -1,0 +1,400 @@
+
+/* ==============================
+   CONFIGURACIÓN GENERAL
+============================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f1f5f9;
+    color: #1e293b;
+    min-height: 100vh;
+}
+
+/* ==============================
+   CONTENEDOR PRINCIPAL
+============================== */
+
+.main {
+    width: 100%;
+    min-height: 100vh;
+    padding: 40px 30px;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.home {
+    width: 100%;
+}
+
+.homecont {
+    width: 100%;
+}
+
+.grid {
+    display: grid;
+}
+
+/* ==============================
+   FORMULARIO
+============================== */
+
+.homedata {
+    width: 100%;
+    background: #ffffff;
+    padding: 45px 55px;
+    border-radius: 18px;
+    box-shadow: 0 10px 35px rgba(15, 23, 42, 0.08);
+    border: 1px solid #e2e8f0;
+}
+/* ==============================
+   CONTENIDO DEL FORMULARIO
+============================== */
+
+.homedata {
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 18px;
+    box-shadow: 0 10px 35px rgba(15, 23, 42, 0.08);
+    border: 1px solid #e2e8f0;
+}
+
+/* ==============================
+   TÍTULOS
+============================== */
+
+.hometile {
+    font-size: 32px;
+    font-weight: 700;
+    text-align: center;
+    color: #0f172a;
+    margin-bottom: 35px;
+}
+
+.homedes {
+    font-size: 19px;
+    font-weight: 600;
+    color: #2563eb;
+    border-bottom: 2px solid #dbeafe;
+    padding-bottom: 12px;
+    margin: 28px 0 24px;
+}
+
+/* ==============================
+   CAMPOS DEL FORMULARIO
+============================== */
+
+form {
+    width: 100%;
+}
+
+.orden {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.orden input {
+    width: 100%;
+    height: 52px;
+    padding: 0 16px;
+    font-size: 15px;
+    color: #1e293b;
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+/* Placeholder */
+
+.orden input::placeholder {
+    color: #94a3b8;
+}
+
+/* Efecto al seleccionar campo */
+
+.orden input:focus {
+    border-color: #2563eb;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+/* Etiquetas */
+
+.orden {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+/* Label arriba */
+.orden label {
+    order: 1;
+    font-size: 14px;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 8px;
+}
+
+/* Input debajo del label */
+.orden input {
+    order: 2;
+    width: 100%;
+    height: 52px;
+    padding: 0 16px;
+    font-size: 15px;
+    color: #1e293b;
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+/* Efecto al seleccionar */
+.orden input:focus {
+    border-color: #2563eb;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+
+/* Elemento decorativo */
+
+.orden span {
+    display: block;
+    width: 0;
+    height: 2px;
+    background: #2563eb;
+    transition: width 0.3s ease;
+}
+
+.orden input:focus + label + span {
+    width: 100%;
+}
+
+/* ==============================
+   CAMPO DE FECHA
+============================== */
+
+.orden input[type="date"] {
+    cursor: pointer;
+    color: #475569;
+}
+
+/* ==============================
+   BOTÓN
+============================== */
+
+.button {
+    display: block;
+    width: 100%;
+    height: 52px;
+    margin-top: 30px;
+    border: none;
+    border-radius: 8px;
+    background: #2563eb;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Efecto hover */
+
+.button:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(37, 99, 235, 0.25);
+}
+
+/* Efecto al presionar */
+
+.button:active {
+    transform: translateY(0);
+}
+
+/* ==============================
+   RESPONSIVE - TABLETS
+============================== */
+
+@media screen and (max-width: 768px) {
+
+    .main {
+        padding: 25px 15px;
+    }
+
+    .homedata {
+        padding: 30px 25px;
+    }
+
+    .hometile {
+        font-size: 28px;
+    }
+
+}
+
+/* ==============================
+   RESPONSIVE - CELULARES
+============================== */
+
+@media screen and (max-width: 480px) {
+
+    .main {
+        padding: 15px 10px;
+    }
+
+    .homedata {
+        padding: 25px 18px;
+        border-radius: 12px;
+    }
+
+    .hometile {
+        font-size: 24px;
+        margin-bottom: 25px;
+    }
+
+    .homedes {
+        font-size: 17px;
+    }
+
+    .orden input {
+        height: 48px;
+        font-size: 14px;
+    }
+}
+
+
+
+.btn-crear-orden {
+    width: 100%;
+    height: 55px;
+    margin-top: 30px;
+
+    border: none;
+    border-radius: 10px;
+
+    background-color: #2563eb;
+    color: white;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.btn-crear-orden:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+.btn-crear-orden:active {
+    transform: translateY(0);
+}
+
+.button {
+    width: 100%;
+    height: 55px;
+    display: block;
+
+    margin-top: 30px;
+    padding: 0;
+
+    border: none;
+    border-radius: 10px;
+
+    background-color: #2563eb;
+    color: white;
+
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.3s ease;
+}
+
+.button:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+.button:active {
+    transform: translateY(0);
+}
+
+.button:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+}
+
+.orden select {
+    display: block;
+    width: 100%;
+    height: 52px;
+
+    padding: 0 16px;
+
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+
+    color: #475569;
+    background-color: #f8fafc;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+
+    outline: none;
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+/* Efecto al pasar el mouse */
+
+.orden select:hover {
+    border-color: #93c5fd;
+}
+
+/* Efecto al seleccionar */
+
+.orden select:focus {
+    border-color: #2563eb;
+    background-color: #ffffff;
+
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+/* Opciones del selector */
+
+.orden select option {
+    color: #1e293b;
+    background-color: #ffffff;
+    padding: 10px;
+}
+
+/* Espaciado del contenedor */
+
+.orden {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
