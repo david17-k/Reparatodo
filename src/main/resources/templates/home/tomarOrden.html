@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Tomar orden - Reparatodo</title>
+
+    <link rel="stylesheet" href="/static/css/tomar.css" th:href="@{/css/tomar.css}">
+</head>
+
+<body>
+
+<main class="container order-container">
+
+    <div class="order-card">
+
+        <div class="order-header">
+            <div>
+                <h1>Tomar orden de servicio</h1>
+                <p>Revisa la información antes de aceptar la reparación.</p>
+            </div>
+
+            <span class="order-status"
+                  th:text="${orden.estado}">
+                Pendiente
+            </span>
+        </div>
+
+        <div class="alert-error"
+             th:if="${error != null}"
+             th:text="${error}">
+        </div>
+
+        <!-- INFORMACIÓN DE LA ORDEN -->
+        <h2 class="section-title">Información de la orden</h2>
+
+        <div class="details-grid">
+            <div class="detail-item">
+                <span class="detail-label">Número de orden</span>
+                <span class="detail-value"
+                      th:text="${orden.id}">1</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">Fecha de creación</span>
+                <span class="detail-value"
+                      th:text="${orden.fecha}">2026-10-17</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">Estado actual</span>
+                <span class="detail-value"
+                      th:text="${orden.estado}">PENDIENTE</span>
+            </div>
+        </div>
+
+        <!-- INFORMACIÓN DEL CLIENTE -->
+        <h2 class="section-title">Información del cliente</h2>
+
+        <div class="details-grid">
+            <div class="detail-item">
+                <span class="detail-label">Cédula del cliente</span>
+                <span class="detail-value"
+                      th:text="${orden.idCliente}">
+                    123456789
+                </span>
+            </div>
+        </div>
+
+        <!-- INFORMACIÓN DEL DISPOSITIVO -->
+        <h2 class="section-title">Información del dispositivo</h2>
+
+        <div class="details-grid">
+            <div class="detail-item">
+                <span class="detail-label">Dispositivo</span>
+                <span class="detail-value"
+                      th:text="${dispositivo.dispositivo}">
+                    Computador portátil
+                </span>
+            </div>
+        </div>
+
+        <!-- DESCRIPCIÓN DE LA FALLA -->
+        <h2 class="section-title">Falla reportada</h2>
+
+        <div class="fault-description"
+             th:text="${dispositivo.dano}">
+            El dispositivo no enciende.
+        </div>
+
+        <!-- DESCRIPCIÓN DE LA FALLA -->
+        <h2 class="section-title">Falla reportada</h2>
+
+        <div class="warning-box">
+            <strong>Importante:</strong>
+            al confirmar, la orden será asignada a tu usuario.
+            Verifica que esté disponible antes de continuar.
+        </div>
+
+        <!-- ACCIONES -->
+        <!-- IDENTIFICACIÓN DEL TÉCNICO -->
+        <h2 class="section-title">Asignación del técnico</h2>
+
+        <form th:action="@{/tomarOrden/{id}(id=${orden.id})}"
+              method="post"
+              class="technician-form">
+
+            <div class="form-group">
+                <label for="cedulaTecnico">ID del técnico</label>
+                <input
+                        type="number"
+                        id="cedulaTecnico"
+                        name="cedulaTecnico"
+                        placeholder="Ingresa tu ID de técnico"
+                        min="1"
+                        step="1"
+                        required
+                >
+                <small>
+                    Ingresa tu identificador para solicitar la asignación
+                    de esta orden.
+                </small>
+            </div>
+
+            <div class="warning-box">
+                <strong>Importante:</strong>
+                el sistema debe comprobar que el ID corresponda a un técnico
+                válido y que la orden todavía esté disponible.
+            </div>
+
+            <div class="form-actions">
+                <a th:href="@{/gestion}" class="btn-cancel">
+                    Cancelar
+                </a>
+
+                <button type="submit" class="btn-confirm">
+                    Confirmar y tomar orden
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+</main>
+
+</body>
+</html>

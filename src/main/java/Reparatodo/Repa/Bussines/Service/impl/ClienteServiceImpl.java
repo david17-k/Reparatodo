@@ -26,12 +26,14 @@ public class ClienteServiceImpl implements ClienteService {
         return crearCliente;
     }
 
+
+
     @Override
     @Transactional(readOnly = true)
     public ClienteDTO getClienteById(Long id) {
         validarFomato(id);
         return clienteDao.findById(id).orElseThrow(()->{
-            return new RuntimeException("Cliente no encontrado");
+            return new RuntimeException("Cliente no encontrado con Cedula{} "+id);
         });
     }
 
@@ -42,7 +44,7 @@ public class ClienteServiceImpl implements ClienteService {
 
 
     private void validarFomato(Long id){
-        if(id<=0 || id==null){
+        if(id<=0){
             throw new RuntimeException("El id no cumple con el formato");
         }
     }

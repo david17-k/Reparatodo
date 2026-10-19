@@ -1,11 +1,11 @@
 
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestionar órdenes | Reparatodo</title>
-    <link rel="stylesheet" href="/static/css/gestion.css" th:href="@{css/gestion.css}">
+    <link rel="stylesheet" href="/static/css/gestion.css"  th:href="@{/css/gestion.css}">
 </head>
 
 <body>
@@ -129,170 +129,48 @@
             </div>
 
             <!-- TABLA -->
-            <div class="table-wrapper">
+            <main class="container">
+                <h1 class="text-center">Órdenes</h1>
+                <h3 class="text-center">Lista de órdenes</h3>
+                <div class="table-wrapper">
+                    <table class="table-border">
+                        <thead>
+                        <tr>
+                            <th scope="col">Número orden</th>
+                            <th scope="col">Cédula cliente</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                        </thead>
 
-                <table>
+                        <tbody>
+                        <tr th:each="orden : ${orderliness}">
+                            <td th:text="${orden.id}"></td>
+                            <td th:text="${orden.idCliente}"></td>
+                            <td th:text="${orden.estado}"></td>
+                            <td th:text="${orden.fecha}"></td>
 
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Cliente</th>
-                        <th>Dispositivo</th>
-                        <th>Fecha</th>
-                        <th>Prioridad</th>
-                        <th>Estado</th>
-                        <th>Acción</th>
-                    </tr>
-                    </thead>
-
-                    <tbody id="ordersTable">
-
-                    <tr
-                            data-client="Carlos Ramirez"
-                            data-device="Laptop Lenovo"
-                            data-status="En reparación"
-                            data-priority="Alta"
-                            data-id="ORD-001"
-                    >
-                        <td class="order-id">ORD-001</td>
-                        <td class="client">Carlos Ramirez</td>
-                        <td class="device">Laptop Lenovo</td>
-                        <td class="date">24/09/2026</td>
-                        <td>
-                            <span class="priority high">● Alta</span>
-                        </td>
-                        <td>
-                            <span class="status repair">En reparación</span>
-                        </td>
-                        <td>
-                            <button
-                                    class="btn-detail"
-                                    onclick="openModal(this)"
-                            >
-                                Ver detalle
-                            </button>
-                        </td>
-                    </tr>
-
-                    <tr
-                            data-client="Maria Gonzalez"
-                            data-device="Celular Samsung"
-                            data-status="En diagnóstico"
-                            data-priority="Media"
-                            data-id="ORD-002"
-                    >
-                        <td class="order-id">ORD-002</td>
-                        <td class="client">Maria Gonzalez</td>
-                        <td class="device">Celular Samsung</td>
-                        <td class="date">24/09/2026</td>
-                        <td>
-                            <span class="priority medium">● Media</span>
-                        </td>
-                        <td>
-                            <span class="status diagnosis">En diagnóstico</span>
-                        </td>
-                        <td>
-                            <button
-                                    class="btn-detail"
-                                    onclick="openModal(this)"
-                            >
-                                Ver detalle
-                            </button>
-                        </td>
-                    </tr>
-
-                    <tr
-                            data-client="Juan Perez"
-                            data-device="Computador HP"
-                            data-status="Listo para entregar"
-                            data-priority="Baja"
-                            data-id="ORD-003"
-                    >
-                        <td class="order-id">ORD-003</td>
-                        <td class="client">Juan Perez</td>
-                        <td class="device">Computador HP</td>
-                        <td class="date">23/09/2026</td>
-                        <td>
-                            <span class="priority low">● Baja</span>
-                        </td>
-                        <td>
-                            <span class="status ready">Listo para entregar</span>
-                        </td>
-                        <td>
-                            <button
-                                    class="btn-detail"
-                                    onclick="openModal(this)"
-                            >
-                                Ver detalle
-                            </button>
-                        </td>
-                    </tr>
-
-                    <tr
-                            data-client="Laura Martinez"
-                            data-device="iPhone 13"
-                            data-status="Recibido"
-                            data-priority="Alta"
-                            data-id="ORD-004"
-                    >
-                        <td class="order-id">ORD-004</td>
-                        <td class="client">Laura Martinez</td>
-                        <td class="device">iPhone 13</td>
-                        <td class="date">23/09/2026</td>
-                        <td>
-                            <span class="priority high">● Alta</span>
-                        </td>
-                        <td>
-                            <span class="status received">Recibido</span>
-                        </td>
-                        <td>
-                            <button
-                                    class="btn-detail"
-                                    onclick="openModal(this)"
-                            >
-                                Ver detalle
-                            </button>
-                        </td>
-                    </tr>
-
-                    <tr
-                            data-client="Pedro Torres"
-                            data-device="PlayStation 5"
-                            data-status="En reparación"
-                            data-priority="Media"
-                            data-id="ORD-005"
-                    >
-                        <td class="order-id">ORD-005</td>
-                        <td class="client">Pedro Torres</td>
-                        <td class="device">PlayStation 5</td>
-                        <td class="date">22/09/2026</td>
-                        <td>
-                            <span class="priority medium">● Media</span>
-                        </td>
-                        <td>
-                            <span class="status repair">En reparación</span>
-                        </td>
-                        <td>
-                            <button
-                                    class="btn-detail"
-                                    onclick="openModal(this)"
-                            >
-                                Ver detalle
-                            </button>
-                        </td>
-                    </tr>
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-            <p id="noResults"
-               style="display:none; text-align:center; padding:25px; color:#64748b;">
-                No se encontraron órdenes.
-            </p>
-
+                            <td>
+                                <a th:href="@{/ordenes/{id}(id=${orden.id})}"
+                                   class="btn-details">
+                                    👁 Ver detalles
+                                </a>
+                                <a th:href="@{/tomar/{id}(id=${orden.id})}"
+                                   class="btn-tomar">
+                                    Tomar orden
+                                </a>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(orderliness)}">
+                            <td colspan="5">
+                                No hay órdenes registradas.
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </main>
         </section>
 
     </main>
@@ -300,70 +178,6 @@
 </div>
 
 <!-- MODAL DE DETALLE -->
-<div class="modal" id="detailModal">
-
-    <div class="modal-content">
-
-        <div class="modal-header">
-            <h2>Detalle de la orden</h2>
-
-            <button class="close" onclick="closeModal()">
-                &times;
-            </button>
-        </div>
-
-        <div class="detail-row">
-            <strong>Número de orden</strong>
-            <span id="modalId"></span>
-        </div>
-
-        <div class="detail-row">
-            <strong>Cliente</strong>
-            <span id="modalClient"></span>
-        </div>
-
-        <div class="detail-row">
-            <strong>Dispositivo</strong>
-            <span id="modalDevice"></span>
-        </div>
-
-        <div class="detail-row">
-            <strong>Fecha de creación</strong>
-            <span id="modalDate"></span>
-        </div>
-
-        <div class="detail-row">
-            <strong>Prioridad</strong>
-            <span id="modalPriority"></span>
-        </div>
-
-        <div class="detail-row">
-            <strong>Falla reportada</strong>
-            <span>El dispositivo no enciende correctamente.</span>
-        </div>
-
-        <div class="detail-row">
-            <strong>Observaciones</strong>
-            <span>Revisar componentes internos y realizar diagnóstico.</span>
-        </div>
-
-        <label for="modalStatus">Actualizar estado</label>
-
-        <select id="modalStatus">
-            <option value="Recibido">Recibido</option>
-            <option value="En diagnóstico">En diagnóstico</option>
-            <option value="En reparación">En reparación</option>
-            <option value="Listo para entregar">Listo para entregar</option>
-            <option value="Entregado">Entregado</option>
-        </select>
-
-        <button class="btn-save" onclick="saveStatus()">
-            Guardar cambio
-        </button>
-
-    </div>
-
-</div>
 
 <script>
 

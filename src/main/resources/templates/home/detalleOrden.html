@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de la orden</title>
+    <link rel="stylesheet" href="/static/css/detalle.css" th:href="@{/css/detalle.css}"/>
+
+
+</head>
+<body>
+<div class="details-card">
+    <h1>Detalles de la orden</h1>
+
+    <div class="detail">
+        <span class="label">Número de orden:</span>
+        <span th:text="${orden.id}"></span>
+    </div>
+
+    <div class="detail">
+        <span class="label">Cédula del cliente:</span>
+        <span th:text="${orden.idCliente}"></span>
+    </div>
+
+    <div class="detail">
+        <span class="label">Fecha:</span>
+        <span th:text="${orden.fecha}"></span>
+    </div>
+
+    <div class="detail">
+        <span class="label">Estado:</span>
+        <span th:text="${orden.estado}"></span>
+    </div>
+
+    <a th:href="@{/gestion}" class="btn-back">
+        ← Volver a las órdenes
+    </a>
+</div>
+</body>
+</html>

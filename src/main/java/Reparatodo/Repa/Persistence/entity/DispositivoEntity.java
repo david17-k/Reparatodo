@@ -11,14 +11,21 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "dispositivo")
 public class DispositivoEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "codigo")
+    private Long codigo;
+
+    @Column(name = "dispositivo")
     private String dispositivo;
-    private String codigo;
+
+    @Column(name = "dano")
     private String dano;
+
+    @Column(name = "observaciones")
     private String observaciones;
+
 
 }

@@ -1,0 +1,38 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    padding: 30px;
+}
+
+.details-card {
+    max-width: 650px;
+    margin: auto;
+    background: white;
+    padding: 28px;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+h1 {
+    color: #243447;
+}
+
+.detail {
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.label {
+    font-weight: bold;
+    color: #526174;
+}
+
+.btn-back {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 10px 16px;
+    background: #243447;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+}

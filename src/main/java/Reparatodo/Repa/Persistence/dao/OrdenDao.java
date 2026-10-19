@@ -9,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 @Slf4j
@@ -22,6 +25,15 @@ public class OrdenDao {
 
         OrdenEntity guardarEntity=ordenRepository.save(entity);
         return ordenMapper.toDTO(guardarEntity);
+    }
+
+    public List<OrdenDTO>getAllOrdenes(){
+        List<OrdenEntity>ordenEntities=ordenRepository.findAll();
+        return ordenMapper.toDTOList(ordenEntities);
+    }
+
+    public Optional<OrdenDTO>findById(Long id){
+        return ordenRepository.findById(id).map(ordenMapper::toDTO);
     }
 
 

@@ -32,12 +32,13 @@ public class OrdenEntity {
     @Column(name = "fechaorden")
     private LocalDate fecha;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="clientecedula")
     private ClienteEntity clienteEntity;
 
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "iddispositivo")
+    private DispositivoEntity dispositivoEntity;
 
 
 }

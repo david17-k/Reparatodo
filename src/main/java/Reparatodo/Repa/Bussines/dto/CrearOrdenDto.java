@@ -24,8 +24,8 @@ public class CrearOrdenDto {
 
 
     // Datos de la orden
+    private Long codigo;
     private String tipoEquipo;
-    private String codigo;
     private String dano;
     private String observaciones;
     private LocalDate fecha;

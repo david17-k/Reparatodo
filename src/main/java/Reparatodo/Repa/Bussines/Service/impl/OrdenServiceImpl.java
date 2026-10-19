@@ -1,19 +1,21 @@
 package Reparatodo.Repa.Bussines.Service.impl;
 
 import Reparatodo.Repa.Bussines.Service.ClienteService;
+import Reparatodo.Repa.Bussines.Service.DispositivoService;
 import Reparatodo.Repa.Bussines.Service.OrdenService;
-import Reparatodo.Repa.Bussines.dto.ClienteDTO;
-import Reparatodo.Repa.Bussines.dto.CrearClienteDTO;
-import Reparatodo.Repa.Bussines.dto.CrearOrdenDto;
-import Reparatodo.Repa.Bussines.dto.OrdenDTO;
+import Reparatodo.Repa.Bussines.dto.*;
 
 
 import Reparatodo.Repa.Persistence.Repository.ClienteRepository;
 import Reparatodo.Repa.Persistence.dao.ClienteDao;
 import Reparatodo.Repa.Persistence.dao.OrdenDao;
+import Reparatodo.Repa.Persistence.entity.OrdenEntity;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @Slf4j
@@ -22,21 +24,48 @@ public class OrdenServiceImpl implements OrdenService {
 
     private final OrdenDao ordenDao;
     private final ClienteService clienteService;
-    private final ClienteRepository clienteRepository;
-    private final ClienteDao clienteDao;
+    private final DispositivoService dispositivoService;
+
 
 
     @Override
     public OrdenDTO crearOrden(CrearOrdenDto crearOrdenDto) {
-        log.info("Creando orden{} ",crearOrdenDto.getNombre());
         validarDatosOrden(crearOrdenDto);
-        log.info("Orden crea con exito{} ",crearOrdenDto.getCedula());
-        CrearClienteDTO crearClienteDTO=new CrearClienteDTO(crearOrdenDto.getCedula(),
-                crearOrdenDto.getNombre(),crearOrdenDto.getApellido(), crearOrdenDto.getCelular());
-        clienteService.crearCliente(crearClienteDTO);
+            CrearClienteDTO cliente=new CrearClienteDTO(
+                    crearOrdenDto.getCedula(),
+                    crearOrdenDto.getNombre(),
+                            crearOrdenDto.getApellido(),
+                            crearOrdenDto.getCelular());
+            clienteService.crearCliente(cliente);
+
+            CrearDispositivoDTO dispositivo=new CrearDispositivoDTO(
+                    crearOrdenDto.getCodigo(),
+                    crearOrdenDto.getTipoEquipo(),
+                    crearOrdenDto.getDano(),
+                    crearOrdenDto.getObservaciones());
+            dispositivoService.crearDispositivo(dispositivo);
         OrdenDTO creaOrden=ordenDao.save(crearOrdenDto);
-        log.info("Orden creada con ID{}",creaOrden.getId());
         return creaOrden;
+    }
+
+    @Override
+    public List<OrdenDTO> getAllOrden() {
+        return ordenDao.getAllOrdenes() ;
+    }
+
+    @Override
+    @Transactional(readOnly=true)
+    public OrdenDTO getOrdenById(Long id) {
+        validarFormato(id);
+        return ordenDao.findById(id).orElseThrow(()->{
+            return new RuntimeException("Orden no encontrada");
+        });
+    }
+
+    private void validarFormato(Long id) {
+        if(id==null || id<=0){
+            throw new RuntimeException("Id no valido");
+        }
     }
 
     private void validarDatosOrden(CrearOrdenDto orden) {

@@ -19,7 +19,7 @@ public class OrdenDTO {
     private Long idCliente;
     private LocalDate fecha;
     private Estado estado;
-    private DispositivoDTO dispositivoDTO;
+    private Long idDispositivo;
 
 
 }

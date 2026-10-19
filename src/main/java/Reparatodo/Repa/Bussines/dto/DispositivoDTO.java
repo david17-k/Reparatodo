@@ -10,9 +10,8 @@ import lombok.NoArgsConstructor;
 @Data
 public class DispositivoDTO {
 
-    Long id;
+    private Long codigo;
     private String dispositivo;
-    private String codigo;
     private String dano;
     private String observaciones;
 }

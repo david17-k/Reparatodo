@@ -14,11 +14,11 @@ public interface OrdenRepository extends JpaRepository<OrdenEntity,Long> {
 
     boolean existsById(Long id);
 
+    @Query("SELECT i FROM OrdenEntity i JOIN FETCH i.clienteEntity WHERE i.id= :id")
+    Optional<OrdenEntity>findByWithCliente(@Param("id")Long id);
 
-    /*
-    @Query("SELECT COUNT(o) FROM OrdenEntity o WHERE o.cliente.id = :clienteId")
-    Long countOrdenesByClienteId(@Param("clienteId") Long clienteId);
 
-     */
+
+
 
 }

@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width , initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/orden.css" th:href="@{css/orden.css}"/>
     <title>Reparatodo</title>
-    <link rel="stylesheet" th:href="@{css/orden.css}"/>
+
 </head>
 <body>
 <main class="main">
@@ -30,13 +31,13 @@
                                 <span></span>
                             </div>
                             <div class="orden">
-                                <input type="text" name="celular" placeholder="Telefono del cliente" required id="telefono">
-                                <label for="telefono">Telefono del cliente</label>
+                                <input type="number" name="cedula" placeholder="Cedula del cliente" required id="cedula">
+                                <label for="cedula">Cedula del cliente</label>
                                 <span></span>
                             </div>
                             <div class="orden">
-                                <input type="number" name="cedula" placeholder="Cedula del cliente" required id="cedula">
-                                <label for="cedula">Cedula del cliente</label>
+                                <input type="text" name="celular" placeholder="Telefono del cliente" required id="telefono">
+                                <label for="telefono">Telefono del cliente</label>
                                 <span></span>
                             </div>
                             <p class="homedes">
@@ -48,7 +49,7 @@
                                 <span></span>
                             </div>
                             <div class="orden">
-                                <input type="text" name="codigo" placeholder="Código del equipo" required id="codigo">
+                                <input type="number" name="codigo" placeholder="Código del equipo" required id="codigo">
                                 <label for="codigo">Código del equipo</label>
                                 <span></span>
                             </div>
