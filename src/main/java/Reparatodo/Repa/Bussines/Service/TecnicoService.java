@@ -8,4 +8,6 @@ public interface TecnicoService {
     TecnicoDTO getTecnicoByid(Long id);
 
     TecnicoDTO actualizarTecnico(Long id, ActualizarTecnico actualizarTecnico);
+
+
 }

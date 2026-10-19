@@ -16,4 +16,8 @@ public interface TecnicoRepository extends JpaRepository<TecnicoEntity,Long> {
 
 
 
+
+
+
+
 }

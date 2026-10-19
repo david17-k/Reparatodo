@@ -17,10 +17,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class TecnicoEntity {
 
     @Id
+    @Column(name = "id")
     Long cedulaTecnico;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "estadoTecnico",nullable = false)
+    @Column(name = "estadotecnico",nullable = false)
     private EstadoTecnico estadoTecnico;
 
     @Column(name = "nombre")
@@ -30,7 +31,9 @@ public class TecnicoEntity {
     private String telefono;
 
     @OneToOne
-    @JoinColumn(name = "ordenId")
-    private OrdenEntity orden;
+    @JoinColumn(name = "ordenid")
+    private OrdenEntity ordenEntity;
+
+
 
 }

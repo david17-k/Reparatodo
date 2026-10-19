@@ -6,9 +6,11 @@ import Reparatodo.Repa.Bussines.dto.TecnicoDTO;
 import Reparatodo.Repa.Persistence.dao.TecnicoDAO;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -30,9 +32,16 @@ public class TecnicoServiceImpl implements TecnicoService {
         if (!tecnicoDAO.findById(id).isPresent()) {
             throw new RuntimeException("Tecnico no registrado");
         }
+        validarDatos(actualizarTecnico);
         TecnicoDTO actualizarTecnicos = tecnicoDAO.actulizarTecnico(id, actualizarTecnico).orElseThrow(() ->
                 new RuntimeException("Error al actualizar el tecnico"));
         return actualizarTecnicos;
+    }
+
+    private void validarDatos(ActualizarTecnico actualizarTecnico) {
+        if(actualizarTecnico.getIdOrden()==null || actualizarTecnico.getIdOrden()<=0){
+            throw new RuntimeException("Id no valido");
+        }
     }
 
 }
