@@ -10,4 +10,6 @@ public interface TecnicoService {
     TecnicoDTO actualizarTecnico(Long id, ActualizarTecnico actualizarTecnico);
 
 
+
+
 }

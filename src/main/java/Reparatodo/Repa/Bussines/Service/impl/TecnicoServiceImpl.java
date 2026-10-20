@@ -32,11 +32,16 @@ public class TecnicoServiceImpl implements TecnicoService {
         if (!tecnicoDAO.findById(id).isPresent()) {
             throw new RuntimeException("Tecnico no registrado");
         }
+
+      if(tecnicoDAO.existsByOrdenEntity(id)){
+         throw new IllegalStateException("El tecnico ya tiene una orden asignada");
+      }
         validarDatos(actualizarTecnico);
         TecnicoDTO actualizarTecnicos = tecnicoDAO.actulizarTecnico(id, actualizarTecnico).orElseThrow(() ->
                 new RuntimeException("Error al actualizar el tecnico"));
         return actualizarTecnicos;
     }
+
 
     private void validarDatos(ActualizarTecnico actualizarTecnico) {
         if(actualizarTecnico.getIdOrden()==null || actualizarTecnico.getIdOrden()<=0){

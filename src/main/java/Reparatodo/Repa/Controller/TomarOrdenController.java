@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
@@ -36,19 +37,50 @@ public class TomarOrdenController {
     }
 
     @PostMapping("/tomarOrden/{id}")
-    public ResponseEntity<TecnicoDTO> actualizarTecnico(
+    public String actualizarTecnico(
             @PathVariable Long id,
-            @RequestParam Long cedulaTecnico) {
+            @RequestParam Long cedulaTecnico,
+            RedirectAttributes redirectAttributes) {
+
         try {
-            ActualizarTecnico actualizarTecnico=new ActualizarTecnico(EstadoTecnico.OCUPADO,id);
-            TecnicoDTO actualizarTecnicos = tecnicoService.actualizarTecnico(cedulaTecnico, actualizarTecnico);
-            return ResponseEntity.ok(actualizarTecnicos);
+            ActualizarTecnico actualizarTecnico =
+                    new ActualizarTecnico(EstadoTecnico.OCUPADO, id);
+
+            tecnicoService.actualizarTecnico(
+                    cedulaTecnico, actualizarTecnico);
+
+            redirectAttributes.addFlashAttribute(
+                    "mensajeExito",
+                    "La orden fue asignada correctamente al técnico."+ cedulaTecnico
+            );
+
         } catch (RuntimeException e) {
-            if(e.getMessage().contains("no registrado")){
-                return ResponseEntity.notFound().build();
+
+            if (e.getMessage() != null &&
+                    e.getMessage().contains("no registrado")) {
+
+                redirectAttributes.addFlashAttribute(
+                        "mensajeError",
+                        "El técnico ingresado no existe. Verifica la cédula."
+                );
+
+            } else if (e instanceof IllegalStateException) {
+
+                redirectAttributes.addFlashAttribute(
+                        "mensajeError",
+                        "El técnico ya posee una orden asignada."
+                );
+
+            } else {
+
+                redirectAttributes.addFlashAttribute(
+                        "mensajeError",
+                        "No fue posible asignar la orden. Intenta nuevamente."
+                );
             }
-            return ResponseEntity.badRequest().build();
         }
+
+        return "redirect:/tomar/" + id;
     }
 
 

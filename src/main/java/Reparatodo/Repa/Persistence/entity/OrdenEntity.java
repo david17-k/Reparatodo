@@ -32,6 +32,9 @@ public class OrdenEntity {
     @Column(name = "fechaorden")
     private LocalDate fecha;
 
+    @Column(name = "observaciones")
+    private String observaciones;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="clientecedula")
     private ClienteEntity clienteEntity;

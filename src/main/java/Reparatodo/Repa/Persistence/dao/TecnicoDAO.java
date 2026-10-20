@@ -23,7 +23,6 @@ public class TecnicoDAO {
         return tecnicoRepository.findById(id).
                 map(existingEntity->{
                     tecnicoMapper.actulizarEntityFromDTO(actualizarTecnico,existingEntity);
-                    System.out.println(existingEntity.getOrdenEntity());
                     TecnicoEntity actualizarEntity=tecnicoRepository.save(existingEntity);
                     return tecnicoMapper.toDTO(actualizarEntity);
                 });
@@ -32,6 +31,15 @@ public class TecnicoDAO {
     public Optional<TecnicoDTO>findById(Long id){
         return tecnicoRepository.findById(id).map(tecnicoMapper::toDTO);
     }
+
+
+   public Optional<TecnicoDTO>findByOrdenEntity_Id(Long id){
+        return tecnicoRepository.findByOrdenEntity_Id(id).map(tecnicoMapper::toDTO);
+   }
+
+   public boolean existsByOrdenEntity(Long id){
+        return tecnicoRepository.existsByCedulaTecnicoAndOrdenEntityIsNotNull(id);
+   }
 
 
 

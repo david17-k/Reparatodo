@@ -89,8 +89,6 @@
             El dispositivo no enciende.
         </div>
 
-        <!-- DESCRIPCIÓN DE LA FALLA -->
-        <h2 class="section-title">Falla reportada</h2>
 
         <div class="warning-box">
             <strong>Importante:</strong>
@@ -127,6 +125,25 @@
                 <strong>Importante:</strong>
                 el sistema debe comprobar que el ID corresponda a un técnico
                 válido y que la orden todavía esté disponible.
+            </div>
+            <!-- Mensaje de éxito -->
+            <div th:if="${mensajeExito}"
+                 class="alerta alerta-exito"
+                 role="alert">
+                <span th:text="${mensajeExito}" ></span>
+
+                <div class="form-actions">
+                    <a th:href="@{/gestion}" class="btn-regresar">Regresar
+                    </a>
+
+                </div>
+            </div>
+
+            <!-- Mensaje de error -->
+            <div th:if="${mensajeError}"
+                 class="alerta alerta-error"
+                 role="alert">
+                <span th:text="${mensajeError}"></span>
             </div>
 
             <div class="form-actions">
