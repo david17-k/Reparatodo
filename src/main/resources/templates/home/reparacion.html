@@ -1,10 +1,159 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Actualizar orden - Reparatodo</title>
+
+    <link rel="stylesheet" href="/static/css/tomar.css" th:href="@{/css/tomar.css}">
 </head>
+
 <body>
+
+<main class="container order-container">
+
+    <div class="order-card">
+
+        <div class="order-header">
+            <div>
+                <h1> Orden de servicio</h1>
+                <p>Revisa la información.</p>
+            </div>
+
+            <span class="order-status"
+                  th:text="${orden.estado}">
+                Pendiente
+            </span>
+        </div>
+
+        <div class="alert-error"
+             th:if="${error != null}"
+             th:text="${error}">
+        </div>
+
+        <!-- INFORMACIÓN DE LA ORDEN -->
+        <h2 class="section-title">Información de la orden</h2>
+
+        <div class="details-grid">
+            <div class="detail-item">
+                <span class="detail-label">Número de orden</span>
+                <span class="detail-value" type="number" name="idOrden"
+                      th:text="${orden.id}" id="idOrden">1</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">Fecha de creación</span>
+                <span class="detail-value"
+                      th:text="${orden.fecha}">2026-10-17</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">Estado actual</span>
+                <span class="detail-value"
+                      th:text="${orden.estado}">PENDIENTE</span>
+            </div>
+        </div>
+
+        <!-- INFORMACIÓN DEL CLIENTE -->
+        <h2 class="section-title">Información del cliente</h2>
+
+        <div class="details-grid">
+            <div class="detail-item">
+                <span class="detail-label">Cédula del cliente</span>
+                <span class="detail-value"
+                      th:text="${orden.idCliente}">
+                    123456789
+                </span>
+            </div>
+        </div>
+
+        <!-- INFORMACIÓN DEL DISPOSITIVO -->
+        <h2 class="section-title">Información del dispositivo</h2>
+
+        <div class="details-grid">
+            <div class="detail-item">
+                <span class="detail-label">Dispositivo</span>
+                <span class="detail-value"
+                      th:text="${dispositivo.dispositivo}">
+                    Computador portátil
+                </span>
+            </div>
+        </div>
+
+        <!-- DESCRIPCIÓN DE LA FALLA -->
+        <h2 class="section-title">Falla reportada</h2>
+
+        <div class="fault-description"
+             th:text="${dispositivo.dano}">
+            El dispositivo no enciende.
+        </div>
+
+        <!-- 2. SELECCIÓN DE NUEVO ESTADO -->
+        <div class="form-group">
+            <label for="nuevoEstado">Nuevo Estado <span class="required">*</span></label>
+            <select id="nuevoEstado" name="nuevoEstado" required>
+                <option value="" disabled selected>-- Selecciona un nuevo estado --</option>
+                <option value="EN_DIAGNOSTICO">En Diagnóstico</option>
+                <option value="ESPERA_REPUESTOS">En Espera de Repuestos</option>
+                <option value="EN_REPARACION">En Reparación</option>
+                <option value="LISTO">Listo para Entrega</option>
+                <option value="ENTREGADO">Entregado al Cliente</option>
+                <option value="CANCELADO">Cancelado / Sin Reparación</option>
+            </select>
+        </div>
+
+        <!-- 3. RECUADRO PARA OBSERVACIONES -->
+        <div class="form-group">
+            <label for="observaciones">Observaciones del Técnico <span class="required">*</span></label>
+            <textarea
+                    id="observaciones"
+                    name="observaciones"
+                    rows="5"
+                    placeholder="Describe los avances, piezas reemplazadas, fallas encontradas o recomendaciones para el cliente..."
+                    required
+            ></textarea>
+            <small>Estas observaciones quedarán registradas en la bitácora de la orden.</small>
+        </div>
+
+        <div class="warning-box">
+            <strong>Nota:</strong> Verifica la información antes de guardar. Toda modificación quedará registrada con tu ID de técnico.
+        </div>
+            <!-- Mensaje de éxito -->
+            <div th:if="${mensajeExito}"
+                 class="alerta alerta-exito"
+                 role="alert">
+                <span th:text="${mensajeExito}" ></span>
+
+                <div class="form-actions">
+                    <a th:href="@{/gestion}" class="btn-regresar">Regresar
+                    </a>
+
+                </div>
+            </div>
+
+            <!-- Mensaje de error -->
+            <div th:if="${mensajeError}"
+                 class="alerta alerta-error"
+                 role="alert">
+                <span th:text="${mensajeError}"></span>
+            </div>
+
+            <div class="form-actions">
+                <a th:href="@{/gestion}" class="btn-cancel">
+                    Cancelar
+                </a>
+
+                <button type="submit" class="btn-confirm">
+                   Actualizar Orden
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+</main>
 
 </body>
 </html>

@@ -14,4 +14,6 @@ public interface OrdenService {
 
     OrdenDTO getOrdenById(Long id);
 
+    boolean tecnicoAsignado(Long id);
+
 }

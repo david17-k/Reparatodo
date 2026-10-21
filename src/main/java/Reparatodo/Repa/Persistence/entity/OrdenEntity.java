@@ -35,6 +35,10 @@ public class OrdenEntity {
     @Column(name = "observaciones")
     private String observaciones;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tecnico")
+    private TecnicoEntity tecnicoEntity;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="clientecedula")
     private ClienteEntity clienteEntity;

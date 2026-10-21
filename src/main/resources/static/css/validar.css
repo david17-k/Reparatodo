@@ -1,0 +1,317 @@
+/* ==============================
+   REPARATODO - VALIDACIÓN TÉCNICO
+   Archivo: tomar.css
+   ============================== */
+
+/* Reinicio general */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --azul-oscuro: #142d4e;
+    --azul: #1e4976;
+    --turquesa: #0d9488;
+    --turquesa-hover: #0f766e;
+    --fondo: #f1f5f9;
+    --blanco: #ffffff;
+    --texto: #243449;
+    --texto-secundario: #64748b;
+    --borde: #dbe3ed;
+    --rojo: #b91c1c;
+    --rojo-fondo: #fef2f2;
+    --rojo-borde: #fecaca;
+    --sombra: 0 15px 40px rgba(20, 45, 78, 0.12);
+}
+
+/* Página */
+body {
+    min-height: 100vh;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background:
+            radial-gradient(circle at top left, #dbeafe 0, transparent 35%),
+            linear-gradient(135deg, #f1f5f9, #e8eef6);
+    color: var(--texto);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+/* Contenedor principal */
+.container {
+    width: 100%;
+    max-width: 560px;
+    margin: auto;
+}
+
+.order-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Tarjeta */
+.order-card {
+    width: 100%;
+    background: var(--blanco);
+    border: 1px solid rgba(219, 227, 237, 0.9);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: var(--sombra);
+    animation: aparecer 0.4s ease-out;
+}
+
+/* Encabezado */
+.order-header {
+    position: relative;
+    padding: 32px;
+    background: linear-gradient(
+            135deg,
+            var(--azul-oscuro),
+            var(--azul)
+    );
+    color: var(--blanco);
+}
+
+.order-header::after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 110px;
+    height: 110px;
+    right: -25px;
+    bottom: -50px;
+    border: 18px solid rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+}
+
+.order-header h1 {
+    font-size: clamp(1.5rem, 4vw, 1.9rem);
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 12px;
+}
+
+.order-header p {
+    position: relative;
+    z-index: 1;
+    color: #dbeafe;
+    font-size: 0.96rem;
+    line-height: 1.7;
+}
+
+.order-header p::first-letter {
+    color: inherit;
+}
+
+/* Formulario */
+.technician-form {
+    padding: 32px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    color: var(--azul-oscuro);
+    font-size: 0.95rem;
+    font-weight: 650;
+}
+
+.required {
+    color: #dc2626;
+    margin-left: 3px;
+}
+
+/* Campo de identificación */
+.form-group input {
+    width: 100%;
+    min-height: 50px;
+    padding: 13px 15px;
+    border: 1px solid var(--borde);
+    border-radius: 9px;
+    background-color: #f8fafc;
+    color: var(--texto);
+    font-family: inherit;
+    font-size: 1rem;
+    outline: none;
+    transition:
+            border-color 0.2s ease,
+            box-shadow 0.2s ease,
+            background-color 0.2s ease;
+}
+
+.form-group input::placeholder {
+    color: #94a3b8;
+}
+
+.form-group input:hover {
+    border-color: #94a3b8;
+}
+
+.form-group input:focus {
+    border-color: var(--turquesa);
+    background-color: var(--blanco);
+    box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.13);
+}
+
+.form-group small {
+    color: var(--texto-secundario);
+    font-size: 0.83rem;
+    line-height: 1.6;
+}
+
+/* Alerta de error */
+.alerta {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 16px;
+    margin-bottom: 22px;
+    border-radius: 9px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.alerta-error {
+    color: var(--rojo);
+    background-color: var(--rojo-fondo);
+    border: 1px solid var(--rojo-borde);
+}
+
+.alerta-error::before {
+    content: "!";
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 21px;
+    height: 21px;
+    border: 1.5px solid currentColor;
+    border-radius: 50%;
+    font-weight: 800;
+    font-size: 0.8rem;
+}
+
+/* Botones */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    padding-top: 8px;
+}
+
+.btn-cancel,
+.btn-confirm {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 46px;
+    padding: 12px 19px;
+    border-radius: 9px;
+    font-family: inherit;
+    font-size: 0.92rem;
+    font-weight: 650;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+            background-color 0.2s ease,
+            color 0.2s ease,
+            border-color 0.2s ease,
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
+}
+
+/* Botón cancelar */
+.btn-cancel {
+    color: var(--azul);
+    background-color: var(--blanco);
+    border: 1px solid var(--borde);
+}
+
+.btn-cancel:hover {
+    background-color: #f1f5f9;
+    border-color: #94a3b8;
+}
+
+/* Botón verificar */
+.btn-confirm {
+    color: var(--blanco);
+    background-color: var(--turquesa);
+    border: 1px solid var(--turquesa);
+}
+
+.btn-confirm:hover {
+    background-color: var(--turquesa-hover);
+    border-color: var(--turquesa-hover);
+    box-shadow: 0 5px 14px rgba(13, 148, 136, 0.22);
+    transform: translateY(-1px);
+}
+
+.btn-confirm:active,
+.btn-cancel:active {
+    transform: translateY(0);
+}
+
+.btn-confirm:focus-visible,
+.btn-cancel:focus-visible {
+    outline: 3px solid rgba(13, 148, 136, 0.35);
+    outline-offset: 3px;
+}
+
+/* Animación de entrada */
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Adaptación a celulares */
+@media (max-width: 520px) {
+    body {
+        padding: 16px;
+    }
+
+    .order-header {
+        padding: 25px 22px;
+    }
+
+    .technician-form {
+        padding: 24px 22px;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .btn-cancel,
+    .btn-confirm {
+        width: 100%;
+        min-height: 48px;
+    }
+}
+
+/* Respeta la preferencia de movimiento del usuario */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}

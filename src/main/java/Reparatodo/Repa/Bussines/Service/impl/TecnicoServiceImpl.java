@@ -1,8 +1,12 @@
 package Reparatodo.Repa.Bussines.Service.impl;
 
+import Reparatodo.Repa.Bussines.Service.OrdenService;
 import Reparatodo.Repa.Bussines.Service.TecnicoService;
 import Reparatodo.Repa.Bussines.dto.ActualizarTecnico;
 import Reparatodo.Repa.Bussines.dto.TecnicoDTO;
+import Reparatodo.Repa.Exception.OrdenConTecnicoAsignadoException;
+import Reparatodo.Repa.Exception.TecnicoNoEncontradoException;
+import Reparatodo.Repa.Exception.TecnicoOrdenAsignada;
 import Reparatodo.Repa.Persistence.dao.TecnicoDAO;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -17,24 +21,27 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class TecnicoServiceImpl implements TecnicoService {
 
     private final TecnicoDAO tecnicoDAO;
+    private final OrdenService ordenService;
 
 
 
     @Override
     public TecnicoDTO getTecnicoByid(Long id) {
         return tecnicoDAO.findById(id).orElseThrow(()->{
-            return new RuntimeException("Tecnico no encontrado");
+            return new TecnicoNoEncontradoException(id);
         });
     }
 
     @Override
     public TecnicoDTO actualizarTecnico(Long id, ActualizarTecnico actualizarTecnico) {
         if (!tecnicoDAO.findById(id).isPresent()) {
-            throw new RuntimeException("Tecnico no registrado");
+            throw new TecnicoNoEncontradoException(id);
         }
-
       if(tecnicoDAO.existsByOrdenEntity(id)){
-         throw new IllegalStateException("El tecnico ya tiene una orden asignada");
+         throw new TecnicoOrdenAsignada(id);
+      }
+      if(ordenService.tecnicoAsignado(actualizarTecnico.getIdOrden())){
+        throw new OrdenConTecnicoAsignadoException(id);
       }
         validarDatos(actualizarTecnico);
         TecnicoDTO actualizarTecnicos = tecnicoDAO.actulizarTecnico(id, actualizarTecnico).orElseThrow(() ->

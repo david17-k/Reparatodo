@@ -36,7 +36,9 @@ public class OrdenDao {
         return ordenRepository.findById(id).map(ordenMapper::toDTO);
     }
 
-
+    public boolean existsByTecnicoEntity(Long id){
+        return ordenRepository.existsByIdAndTecnicoEntityIsNotNull(id);
+    }
 
 
 }

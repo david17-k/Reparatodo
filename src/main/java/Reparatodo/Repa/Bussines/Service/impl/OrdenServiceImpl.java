@@ -62,6 +62,11 @@ public class OrdenServiceImpl implements OrdenService {
         });
     }
 
+    @Override
+    public boolean tecnicoAsignado(Long id) {
+        return ordenDao.existsByTecnicoEntity(id);
+    }
+
     private void validarFormato(Long id) {
         if(id==null || id<=0){
             throw new RuntimeException("Id no valido");

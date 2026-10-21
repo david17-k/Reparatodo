@@ -14,6 +14,8 @@ public interface OrdenRepository extends JpaRepository<OrdenEntity,Long> {
 
     boolean existsById(Long id);
 
+    boolean existsByIdAndTecnicoEntityIsNotNull(Long id);
+
     @Query("SELECT i FROM OrdenEntity i JOIN FETCH i.clienteEntity WHERE i.id= :id")
     Optional<OrdenEntity>findByWithCliente(@Param("id")Long id);
 

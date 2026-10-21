@@ -8,6 +8,9 @@ import Reparatodo.Repa.Bussines.dto.ActualizarTecnico;
 import Reparatodo.Repa.Bussines.dto.DispositivoDTO;
 import Reparatodo.Repa.Bussines.dto.OrdenDTO;
 import Reparatodo.Repa.Bussines.dto.TecnicoDTO;
+import Reparatodo.Repa.Exception.OrdenConTecnicoAsignadoException;
+import Reparatodo.Repa.Exception.TecnicoNoEncontradoException;
+import Reparatodo.Repa.Exception.TecnicoOrdenAsignada;
 import Reparatodo.Repa.Persistence.entity.OrdenEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -45,47 +48,66 @@ public class TomarOrdenController {
         try {
             ActualizarTecnico actualizarTecnico =
                     new ActualizarTecnico(EstadoTecnico.OCUPADO, id);
-
             tecnicoService.actualizarTecnico(
                     cedulaTecnico, actualizarTecnico);
-
             redirectAttributes.addFlashAttribute(
                     "mensajeExito",
                     "La orden fue asignada correctamente al técnico."+ cedulaTecnico
             );
 
-        } catch (RuntimeException e) {
+        } catch (TecnicoNoEncontradoException e) {
+            redirectAttributes.addFlashAttribute(
+                    "mensajeError",
+                    "El técnico ingresado no existe. Verifica la cédula."
+            );
 
+        }catch (TecnicoOrdenAsignada e) {
+            redirectAttributes.addFlashAttribute(
+                    "mensajeError",
+                    "El técnico ya posee una orden asignada."
+            );
+        }
+        catch (OrdenConTecnicoAsignadoException e){
+            redirectAttributes.addFlashAttribute(
+                    "mensajeError",
+                    "La orden ya cuenta con tecnico asignado"
+            );
+
+        }
+           catch (Exception e) {
+                redirectAttributes.addFlashAttribute(
+                        "mensajeError",
+                        "No fue posible asignar la orden. Intenta nuevamente."
+                );
+            }
+        return "redirect:/tomar/" + id;
+    }
+
+    @GetMapping("/validaciontecnico")
+    public String validar(){
+        return "home/validarTecnico";
+    }
+
+    @PostMapping("/verificar")
+    public String verificarTecnico(@RequestParam Long cedulaTecnico,
+                                   RedirectAttributes redirectAttributes ){
+        try {
+            tecnicoService.getTecnicoByid(cedulaTecnico);
+            return "redirect:/reparacion/"+cedulaTecnico;
+        }catch (RuntimeException e){
             if (e.getMessage() != null &&
-                    e.getMessage().contains("no registrado")) {
-
+                    e.getMessage().contains("no encontrado")) {
                 redirectAttributes.addFlashAttribute(
                         "mensajeError",
                         "El técnico ingresado no existe. Verifica la cédula."
                 );
-
-            } else if (e instanceof IllegalStateException) {
-
-                redirectAttributes.addFlashAttribute(
-                        "mensajeError",
-                        "El técnico ya posee una orden asignada."
-                );
-
-            } else {
-
+        }else {
                 redirectAttributes.addFlashAttribute(
                         "mensajeError",
                         "No fue posible asignar la orden. Intenta nuevamente."
                 );
             }
         }
-
-        return "redirect:/tomar/" + id;
+        return "redirect:/validaciontecnico";
     }
-
-
-
-
-
-
 }

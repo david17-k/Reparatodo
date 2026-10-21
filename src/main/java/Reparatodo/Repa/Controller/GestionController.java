@@ -52,6 +52,11 @@ public class GestionController {
         return "home/tomarOrden";
     }
 
+    @GetMapping("/validacion")
+    public String validar(){
+        return "home/validarTecnico";
+    }
+
 
 
 

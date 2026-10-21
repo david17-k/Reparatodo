@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validar Técnico - Reparatodo</title>
+    <link rel="stylesheet" href="/static/css/tomar.css" th:href="@{/css/validar.css}">
+</head>
+
+<body>
+
+<main class="container order-container">
+    <div class="order-card">
+
+        <div class="order-header">
+            <div>
+                <h1>Identificación requerida</h1>
+                <p>Ingresa tu ID de técnico para acceder a la edición de la orden.</p>
+            </div>
+        </div>
+        <!-- Formulario que envía el ID del técnico a una ruta de validación en el Controller -->
+        <form th:action="@{/verificar}" method="post" class="technician-form">
+            <div class="form-group">
+                <label for="cedulaTecnico">ID o Cédula del Técnico <span class="required">*</span></label>
+                <input
+                        type="number"
+                        id="cedulaTecnico"
+                        name="cedulaTecnico"
+                        placeholder="Ej. 1098..."
+                        min="1"
+                        step="1"
+                        required
+                        autofocus
+                >
+                <small>Introduce tu identificador para comprobar permisos sobre esta orden.</small>
+            </div>
+
+            <!-- Alerta si el ID es incorrecto -->
+            <div th:if="${mensajeError}"
+                 class="alerta alerta-error"
+                 role="alert">
+                <span th:text="${mensajeError}"></span>
+            </div>
+
+            <div class="form-actions">
+                <a th:href="@{/gestion}" class="btn-cancel">Cancelar</a>
+                <button type="submit" class="btn-confirm">Verificar e ingresar</button>
+            </div>
+        </form>
+
+    </div>
+</main>
+</body>
+</html>
