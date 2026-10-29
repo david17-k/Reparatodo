@@ -2,11 +2,19 @@
 
 ## 1. Contexto
 
+Se identificó que el servicio técnico **Reparatodo** presentaba una problemática relacionada con los tiempos prolongados de reparación y la falta de transparencia durante la prestación del servicio, lo que generaba inconformidad y reclamos por parte de los clientes.
+
+Con el propósito de mejorar estos aspectos, la empresa contrató expertos que recomendaron el desarrollo de un software para gestionar los procesos de atención y reparación de dispositivos electrónicos.
+
+El sistema permitirá que los clientes consulten el estado de sus órdenes y lleven un seguimiento de las reparaciones realizadas a sus dispositivos. Asimismo, facilitará al personal del servicio técnico la gestión y actualización de las órdenes de acuerdo con el estado en que se encuentre cada equipo, proporcionando mayor control y trazabilidad durante el proceso de reparación.
+
+Adicionalmente, cuando una orden alcance el estado de **reparada**, el sistema enviará una notificación por correo electrónico al centro de atención telefónica (*call center*), con el fin de informar al cliente que su dispositivo está listo para ser recogido.
+
 ### 1.1 Equipo
 
 El proyecto Reparatodo es desarrollado por un equipo de trabajo académico como parte de la asignatura de Ingeniería de Software II.
 
-**Integrantes:** [Nombres de los integrantes del equipo].
+**Integrantes:** Juan David Castillo Hernandez.
 
 ### 1.2 Repositorio
 
