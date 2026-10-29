@@ -6,6 +6,7 @@ import Reparatodo.Repa.Bussines.Service.OrdenService;
 import Reparatodo.Repa.Bussines.dto.*;
 
 
+import Reparatodo.Repa.Exception.OrdenNoEncontradaException;
 import Reparatodo.Repa.Persistence.Repository.ClienteRepository;
 import Reparatodo.Repa.Persistence.dao.ClienteDao;
 import Reparatodo.Repa.Persistence.dao.OrdenDao;
@@ -60,6 +61,16 @@ public class OrdenServiceImpl implements OrdenService {
         return ordenDao.findById(id).orElseThrow(()->{
             return new RuntimeException("Orden no encontrada");
         });
+    }
+
+    @Override
+    public OrdenDTO actualizarOrden(Long id, ActualizarOrdenDTO actualizarOrdenDTO) {
+        if(!ordenDao.findById(id).isPresent()){
+            throw new OrdenNoEncontradaException(id);
+        }
+        OrdenDTO actualizarDTO=ordenDao.actualizarOrden(id, actualizarOrdenDTO).orElseThrow(()->
+            new RuntimeException("Error al actulizar los datos"));
+        return actualizarDTO;
     }
 
     @Override

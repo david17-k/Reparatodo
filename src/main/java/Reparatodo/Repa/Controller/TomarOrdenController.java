@@ -7,13 +7,10 @@ import Reparatodo.Repa.Bussines.Service.TecnicoService;
 import Reparatodo.Repa.Bussines.dto.ActualizarTecnico;
 import Reparatodo.Repa.Bussines.dto.DispositivoDTO;
 import Reparatodo.Repa.Bussines.dto.OrdenDTO;
-import Reparatodo.Repa.Bussines.dto.TecnicoDTO;
 import Reparatodo.Repa.Exception.OrdenConTecnicoAsignadoException;
 import Reparatodo.Repa.Exception.TecnicoNoEncontradoException;
 import Reparatodo.Repa.Exception.TecnicoOrdenAsignada;
-import Reparatodo.Repa.Persistence.entity.OrdenEntity;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -93,7 +90,7 @@ public class TomarOrdenController {
                                    RedirectAttributes redirectAttributes ){
         try {
             tecnicoService.getTecnicoByid(cedulaTecnico);
-            return "redirect:/reparacion/"+cedulaTecnico;
+            return "redirect:/reparacion/" + cedulaTecnico;
         }catch (RuntimeException e){
             if (e.getMessage() != null &&
                     e.getMessage().contains("no encontrado")) {

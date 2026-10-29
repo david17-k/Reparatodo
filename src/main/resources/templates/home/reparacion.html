@@ -89,21 +89,21 @@
             El dispositivo no enciende.
         </div>
 
-        <!-- 2. SELECCIÓN DE NUEVO ESTADO -->
-        <div class="form-group">
-            <label for="nuevoEstado">Nuevo Estado <span class="required">*</span></label>
-            <select id="nuevoEstado" name="nuevoEstado" required>
-                <option value="" disabled selected>-- Selecciona un nuevo estado --</option>
-                <option value="EN_DIAGNOSTICO">En Diagnóstico</option>
-                <option value="ESPERA_REPUESTOS">En Espera de Repuestos</option>
-                <option value="EN_REPARACION">En Reparación</option>
-                <option value="LISTO">Listo para Entrega</option>
-                <option value="ENTREGADO">Entregado al Cliente</option>
-                <option value="CANCELADO">Cancelado / Sin Reparación</option>
-            </select>
-        </div>
 
         <!-- 3. RECUADRO PARA OBSERVACIONES -->
+        <form th:action="@{/actualizarorden/{id}(id=${orden.id})}" method="post" class="technician-form" >
+
+            <div class="form-group">
+                <label for="estado">Nuevo Estado <span class="required">*</span></label>
+                <select id="estado" name="estado" required>
+                    <option value="" disabled selected>-- Selecciona un nuevo estado --</option>
+                    <option value="EN_REPARACION">En reparacion</option>
+                    <option value="REPARADO">Reparado</option>
+                    <option value="LISTO">Listo para Entrega</option>
+                    <option value="CANCELADO">Cancelado / Sin Reparación</option>
+                </select>
+            </div>
+
         <div class="form-group">
             <label for="observaciones">Observaciones del Técnico <span class="required">*</span></label>
             <textarea
@@ -130,13 +130,6 @@
                     </a>
 
                 </div>
-            </div>
-
-            <!-- Mensaje de error -->
-            <div th:if="${mensajeError}"
-                 class="alerta alerta-error"
-                 role="alert">
-                <span th:text="${mensajeError}"></span>
             </div>
 
             <div class="form-actions">

@@ -12,6 +12,8 @@ public interface OrdenRepository extends JpaRepository<OrdenEntity,Long> {
 
     Optional<OrdenEntity> findById(Long id);
 
+
+
     boolean existsById(Long id);
 
     boolean existsByIdAndTecnicoEntityIsNotNull(Long id);

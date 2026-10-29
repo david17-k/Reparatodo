@@ -13,6 +13,7 @@ unmappedSourcePolicy = ReportingPolicy.WARN)
 public interface TecnicoMapper {
 
 
+
     @Mapping(target = "ordenEntity",source = "idOrden",qualifiedByName = "createOrdenEntityFromId")
     TecnicoEntity toEntity(TecnicoDTO tecnicoDTO);
 

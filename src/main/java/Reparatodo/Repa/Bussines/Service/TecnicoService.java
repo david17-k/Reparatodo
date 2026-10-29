@@ -9,6 +9,12 @@ public interface TecnicoService {
 
     TecnicoDTO actualizarTecnico(Long id, ActualizarTecnico actualizarTecnico);
 
+    TecnicoDTO getOrdenById(Long id);
+
+    Long idOrden(Long id);
+
+
+
 
 
 

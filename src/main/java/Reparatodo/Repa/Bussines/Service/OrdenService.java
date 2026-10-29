@@ -1,5 +1,6 @@
 package Reparatodo.Repa.Bussines.Service;
 
+import Reparatodo.Repa.Bussines.dto.ActualizarOrdenDTO;
 import Reparatodo.Repa.Bussines.dto.CrearOrdenDto;
 import Reparatodo.Repa.Bussines.dto.OrdenDTO;
 
@@ -13,6 +14,8 @@ public interface OrdenService {
     List<OrdenDTO>getAllOrden();
 
     OrdenDTO getOrdenById(Long id);
+
+    OrdenDTO actualizarOrden(Long id, ActualizarOrdenDTO actualizarOrdenDTO);
 
     boolean tecnicoAsignado(Long id);
 

@@ -1,5 +1,6 @@
 package Reparatodo.Repa.Persistence.dao;
 
+import Reparatodo.Repa.Bussines.dto.ActualizarOrdenDTO;
 import Reparatodo.Repa.Bussines.dto.CrearOrdenDto;
 import Reparatodo.Repa.Bussines.dto.OrdenDTO;
 import Reparatodo.Repa.Persistence.Repository.OrdenRepository;
@@ -25,6 +26,14 @@ public class OrdenDao {
 
         OrdenEntity guardarEntity=ordenRepository.save(entity);
         return ordenMapper.toDTO(guardarEntity);
+    }
+
+    public Optional<OrdenDTO>actualizarOrden(Long id, ActualizarOrdenDTO actualizarOrdenDTO){
+        return ordenRepository.findById(id).map(existingEntity->{;
+            ordenMapper.actualuzarEntityFromDTO(actualizarOrdenDTO,existingEntity);
+            OrdenEntity actualizarEntity=ordenRepository.save(existingEntity);
+            return ordenMapper.toDTO(actualizarEntity);
+                });
     }
 
     public List<OrdenDTO>getAllOrdenes(){

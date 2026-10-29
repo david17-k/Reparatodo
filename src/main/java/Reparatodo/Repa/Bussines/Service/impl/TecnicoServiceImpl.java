@@ -49,6 +49,18 @@ public class TecnicoServiceImpl implements TecnicoService {
         return actualizarTecnicos;
     }
 
+    @Override
+    public TecnicoDTO getOrdenById(Long id) {
+        return tecnicoDAO.findByOrdenEntity_Id(id).orElseThrow(() -> {
+            return new RuntimeException("Orden no encontrada");
+        });
+    }
+
+    @Override
+    public Long idOrden(Long id) {
+        return tecnicoDAO.buscarOrden(id).orElseThrow(()->
+                new RuntimeException("El tecnico no tiene ordenes"));
+    }
 
     private void validarDatos(ActualizarTecnico actualizarTecnico) {
         if(actualizarTecnico.getIdOrden()==null || actualizarTecnico.getIdOrden()<=0){

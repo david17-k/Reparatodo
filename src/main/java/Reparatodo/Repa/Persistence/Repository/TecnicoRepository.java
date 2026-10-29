@@ -16,16 +16,16 @@ public interface TecnicoRepository extends JpaRepository<TecnicoEntity,Long> {
 
     Optional<TecnicoEntity>findById(Long id);
 
-    boolean existsByCedulaTecnicoAndOrdenEntityIsNotNull(
-            Long cedulaTecnico
-    );
+    boolean existsByCedulaTecnicoAndOrdenEntityIsNotNull(Long cedulaTecnico);
 
     Optional<TecnicoEntity>findByOrdenEntity_Id(Long id);
-/*
-    @Query("SELECT COUNT(p) FROM OrdenEntity p WHERE p.tecnicoEntity.cedulaTecnico= :tecnicoId")
-    Long countOrdenByTecnicoId(@Param("tecnicoId")Long tecnicoId);
 
- */
+
+
+    @Query("SELECT t.ordenEntity.id FROM TecnicoEntity t WHERE t.cedulaTecnico=:cedula")
+    Optional<Long>buscarOrden(@Param("cedula")Long cedula);
+
+
 
 
 
