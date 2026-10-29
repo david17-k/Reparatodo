@@ -11,7 +11,7 @@ El proyecto Reparatodo es desarrollado por un equipo de trabajo académico como 
 ### 1.2 Repositorio
 
 - **Nombre del proyecto:** Reparatodo.
-- **Repositorio:** .
+- **Repositorio:*https://github.com/david17-k/Reparatodo.git* .
 - **Rama de trabajo:** main.
 - **Lenguaje de programación:** Java.
 - **Framework:** Spring Boot.
