@@ -261,4 +261,132 @@ Los hallazgos H-09 y H-11 se mantienen como aspectos pendientes de análisis y v
 
 La priorización no significa que H-03 sea el hallazgo de mayor impacto, sino que representa el cambio más viable para iniciar el proceso de refactorización.
 
-### 5. Intervencion ##
+## 5. Intervención
+
+### 5.1 Cambio elegido
+
+Se seleccionó el hallazgo **H-03: Validación de datos después de las consultas**, identificado en el método `actualizarTecnico()` de la clase `TecnicoServiceImpl`.
+
+La intervención consiste en cambiar el orden de ejecución de las instrucciones para que los datos recibidos sean validados antes de realizar consultas a la base de datos.
+
+El objetivo es mejorar la organización del método, evitar consultas innecesarias cuando los datos de entrada son inválidos y facilitar el mantenimiento del código.
+
+**Tipo de intervención:** Refactorización localizada.
+
+**Estado:** Propuesta pendiente de implementación y pruebas.
+
+### 5.2 Diseño antes de la refactorización
+
+En la implementación original, el método realiza primero las consultas para comprobar la existencia del técnico y las asignaciones de órdenes. Después ejecuta la validación de los datos recibidos.
+
+Flujo original:
+
+1. Consultar si el técnico existe.
+2. Verificar si el técnico ya tiene una orden asignada.
+3. Verificar si la orden solicitada ya tiene un técnico.
+4. Validar los datos de entrada.
+5. Actualizar la información del técnico.
+
+Código original:
+
+```java
+@Override
+public TecnicoDTO actualizarTecnico(
+        Long id,
+        ActualizarTecnico actualizarTecnico) {
+
+    if (!tecnicoDAO.findById(id).isPresent()) {
+        throw new TecnicoNoEncontradoException(id);
+    }
+
+    if (tecnicoDAO.existsByOrdenEntity(id)) {
+        throw new TecnicoOrdenAsignada(id);
+    }
+
+    if (ordenService.tecnicoAsignado(actualizarTecnico.getIdOrden())) {
+        throw new OrdenConTecnicoAsignadoException(id);
+    }
+
+    validarDatos(actualizarTecnico);
+
+    TecnicoDTO actualizarTecnicos =
+            tecnicoDAO.actulizarTecnico(id, actualizarTecnico)
+                    .orElseThrow(() ->
+                            new RuntimeException(
+                                    "Error al actualizar el tecnico"));
+
+    return actualizarTecnicos;
+}
+```
+
+### 5.3 Diseño después de la refactorización
+
+La propuesta consiste en trasladar la validación al inicio del método, antes de realizar las consultas.
+
+Flujo propuesto:
+
+1. Validar los datos de entrada.
+2. Consultar si el técnico existe.
+3. Verificar si el técnico ya tiene una orden asignada.
+4. Verificar si la orden solicitada ya tiene un técnico.
+5. Actualizar la información del técnico.
+
+Código propuesto:
+
+```java
+@Override
+public TecnicoDTO actualizarTecnico(
+        Long id,
+        ActualizarTecnico actualizarTecnico) {
+
+    validarDatos(actualizarTecnico);
+
+    if (!tecnicoDAO.findById(id).isPresent()) {
+        throw new TecnicoNoEncontradoException(id);
+    }
+
+    if (tecnicoDAO.existsByOrdenEntity(id)) {
+        throw new TecnicoOrdenAsignada(id);
+    }
+
+    if (ordenService.tecnicoAsignado(actualizarTecnico.getIdOrden())) {
+        throw new OrdenConTecnicoAsignadoException(id);
+    }
+
+    return tecnicoDAO.actulizarTecnico(id, actualizarTecnico)
+            .orElseThrow(() ->
+                    new RuntimeException(
+                            "Error al actualizar el tecnico"));
+}
+```
+
+### 5.4 Comparación antes y después
+
+| Aspecto | Antes | Después |
+|---|---|---|
+| Validación de datos | Se ejecuta después de las consultas. | Se ejecuta al inicio del método. |
+| Consultas con datos inválidos | Pueden ejecutarse antes de validar. | Se evita ejecutarlas cuando falla la validación inicial. |
+| Reglas de asignación | Se mantienen. | Se mantienen. |
+| Persistencia | Se realiza mediante `TecnicoDAO`. | Se mantiene mediante `TecnicoDAO`. |
+| Resultado esperado para datos válidos | Actualización del técnico. | Se conserva la actualización del técnico. |
+
+### 5.5 Archivos afectados
+
+| Archivo | Modificación |
+|---|---|
+| `TecnicoServiceImpl.java` | Modificar el orden de ejecución de las instrucciones dentro de `actualizarTecnico()`. |
+| `DIAGNOSTICO_REFACTORIZACION.md` | Documentar el hallazgo, la intervención y los resultados de las pruebas. |
+
+No se requiere modificar `TecnicoController`, `TecnicoDAO`, `TecnicoRepository` ni `TecnicoMapper`, ya que la intervención seleccionada se limita al orden de ejecución de las validaciones dentro del servicio.
+
+### 5.6 Justificación del diseño
+
+La intervención conserva las responsabilidades existentes de cada componente y no modifica las reglas de negocio relacionadas con la asignación de órdenes.
+
+Se considera una refactorización localizada porque reorganiza el código sin cambiar la estructura general de la arquitectura.
+
+Para entradas válidas, se espera mantener el resultado de la operación. Para entradas inválidas, el sistema realizará primero la validación y podrá devolver el error correspondiente antes de consultar la información del técnico o de la orden.
+
+El cambio deberá verificarse mediante pruebas que comprueben tanto los casos válidos como los inválidos.
+
+## 6 
