@@ -397,4 +397,125 @@ Para entradas válidas, se espera mantener el resultado de la operación. Para e
 
 El cambio deberá verificarse mediante pruebas que comprueben tanto los casos válidos como los inválidos.
 
-## 6 
+## 6. Verificación
+
+### 6.1 Objetivo de las pruebas
+
+Verificar que la refactorización realizada en el método `actualizarTecnico()` de la clase `TecnicoServiceImpl` mantenga el comportamiento esperado del sistema y ejecute la validación de los datos de entrada antes de realizar las consultas de asignación.
+
+Las pruebas buscan comprobar que:
+
+- Los datos inválidos sean rechazados antes de realizar consultas.
+- Un técnico inexistente genere la excepción correspondiente.
+- Un técnico que ya tenga una orden asignada no pueda tomar otra.
+- Una orden que ya tenga un técnico asignado no pueda ser asignada nuevamente.
+- Una solicitud válida permita actualizar correctamente la información del técnico.
+
+### 6.2 Pruebas ejecutadas
+
+| ID | Caso de prueba | Resultado esperado | Resultado obtenido |
+|---|---|---|---|
+| CP-01 | Enviar un identificador de orden nulo. | Rechazar la solicitud mediante la validación de datos. | [Completar] |
+| CP-02 | Enviar un identificador de orden igual o menor que cero. | Rechazar la solicitud mediante la validación de datos. | [Completar] |
+| CP-03 | Intentar actualizar un técnico inexistente con datos válidos. | Generar `TecnicoNoEncontradoException`. | [Completar] |
+| CP-04 | Intentar asignar otra orden a un técnico que ya tiene una. | Generar `TecnicoOrdenAsignada`. | [Completar] |
+| CP-05 | Intentar asignar una orden que ya tiene un técnico. | Generar `OrdenConTecnicoAsignadoException`. | [Completar] |
+| CP-06 | Asignar una orden disponible a un técnico válido. | Actualizar correctamente la información del técnico. | [Completar] |
+
+**Estado de las pruebas:** Pendiente de ejecución y registro de resultados.
+
+### 6.3 Resultados obtenidos
+
+Una vez ejecutadas las pruebas, se registrarán los resultados para determinar si la intervención cumple con el comportamiento esperado.
+
+La refactorización se considerará satisfactoria cuando las validaciones se ejecuten en el orden establecido y se mantengan las reglas de negocio de la asignación de órdenes.
+
+Los resultados deben indicar si cada caso fue aprobado o rechazado, junto con una breve explicación cuando se presente algún comportamiento diferente al esperado.
+
+### 6.4 Evidencias antes y después
+
+Para demostrar la intervención realizada se recopilarán las siguientes evidencias:
+
+| Evidencia | Descripción |
+|---|---|
+| EV-01 | Captura del método `actualizarTecnico()` antes de la refactorización, mostrando que `validarDatos()` se ejecutaba después de las consultas. |
+| EV-02 | Captura del método `actualizarTecnico()` después de la refactorización, mostrando que `validarDatos()` se ejecuta al inicio. |
+| EV-03 | Captura de la ejecución de las pruebas correspondientes a los datos inválidos. |
+| EV-04 | Captura de la ejecución de una prueba de asignación exitosa. |
+
+Las capturas se almacenarán en la carpeta `docs/refactorizacion/evidencias/`.
+
+### 6.5 Limitaciones
+
+Durante la verificación se deben tener en cuenta las siguientes limitaciones:
+
+- La intervención se limita al orden de ejecución de las validaciones dentro del método `actualizarTecnico()`.
+- No se modifica la arquitectura general ni la estructura de la base de datos.
+- Las pruebas de esta intervención no garantizan que el sistema esté protegido frente a asignaciones simultáneas.
+- No se verifica de manera integral la transición de estados del técnico y de las órdenes.
+- Los hallazgos H-09 y H-11 requieren análisis y pruebas adicionales.
+
+Por lo tanto, esta intervención permite mejorar la organización de las validaciones, pero no representa una solución definitiva para todos los riesgos identificados durante la auditoría.
+
+### 6.6 Conclusión de la verificación
+
+La verificación permitirá determinar si el cambio realizado conserva el comportamiento esperado de la funcionalidad **Tomar orden** y mejora el proceso de validación de los datos.
+
+La aceptación definitiva de la refactorización dependerá de los resultados obtenidos durante la ejecución de las pruebas y de la evidencia recopilada antes y después del cambio.
+
+## 7. Cierre
+
+### 7.1 Lecciones aprendidas
+
+Durante la auditoría de la funcionalidad **Tomar orden** del sistema Reparatodo se identificó la importancia de mantener una correcta organización del código y de aplicar adecuadamente las validaciones antes de ejecutar operaciones sobre la información almacenada.
+
+Entre las principales lecciones aprendidas se encuentran:
+
+- **Importancia de validar los datos:** las validaciones deben ejecutarse antes de realizar consultas o modificaciones innecesarias en la base de datos.
+- **Separación de responsabilidades:** mantener una arquitectura organizada por capas facilita la identificación de problemas y el mantenimiento del sistema.
+- **Integridad de la información:** las operaciones de asignación deben protegerse para evitar inconsistencias cuando varios usuarios realizan solicitudes simultáneamente.
+- **Control de estados:** es necesario establecer reglas claras para garantizar que los técnicos y las órdenes cambien de estado de manera coherente.
+- **Importancia de las pruebas:** las modificaciones realizadas deben verificarse para comprobar que se conserva el comportamiento esperado de la aplicación.
+
+La auditoría permitió comprender que la refactorización no consiste únicamente en modificar código, sino también en mejorar su organización, legibilidad, mantenibilidad y confiabilidad sin alterar innecesariamente las funcionalidades existentes.
+
+### 7.2 Deuda técnica pendiente
+
+Aunque se seleccionó H-03 como primera intervención, durante la auditoría se identificaron otros aspectos que requieren atención:
+
+| ID | Deuda técnica o riesgo pendiente | Acción recomendada | Prioridad |
+|---|---|---|---|
+| H-09 | Posibles inconsistencias por asignaciones simultáneas de órdenes. | Revisar el manejo de transacciones, bloqueos y restricciones de integridad, y ejecutar pruebas de concurrencia. | Alta |
+| H-11 | No se observa una validación completa de las transiciones de estado en el código revisado. | Revisar las reglas de negocio y centralizar las validaciones de estados cuando sea necesario. | Alta |
+| H-01 | Captura genérica de excepciones en el controlador. | Mejorar el manejo de errores y utilizar excepciones específicas. | Media |
+| H-02 | Identificación de errores mediante comparación de mensajes de texto. | Utilizar excepciones específicas para distinguir los diferentes casos. | Media |
+| H-05 | Uso de `System.out.println()` para registrar información. | Implementar un sistema de registros mediante un logger. | Baja |
+| H-06 | Uso de excepciones genéricas. | Definir excepciones específicas para los errores del proceso. | Media |
+| H-12 | Declaración redundante de `findById()` en el repositorio. | Eliminar la declaración si no existe una necesidad específica de sobrescribir el método heredado. | Baja |
+
+Estos aspectos no forman parte de la intervención principal seleccionada, por lo que quedan registrados como oportunidades de mejora y riesgos pendientes de análisis.
+
+### 7.3 Relación con el proceso de desarrollo
+
+La auditoría y la refactorización se integran al proceso de desarrollo de Reparatodo como actividades orientadas a mejorar continuamente la calidad del software.
+
+El proceso realizado contempla las siguientes etapas:
+
+1. **Identificación del problema:** se revisó la funcionalidad Tomar orden para detectar posibles dificultades en su implementación.
+2. **Análisis del código:** se estudiaron los componentes, las dependencias y el flujo de ejecución.
+3. **Identificación de hallazgos:** se documentaron tres hallazgos principales relacionados con validaciones, asignación simultánea y control de estados.
+4. **Priorización:** se evaluaron los hallazgos según su impacto, riesgo y esfuerzo de solución.
+5. **Selección de la intervención:** se eligió H-03 por ser un cambio localizado y de bajo esfuerzo.
+6. **Refactorización:** se propuso reorganizar el método `actualizarTecnico()` para ejecutar las validaciones antes de las consultas.
+7. **Verificación:** se definieron pruebas para comprobar que el cambio conserve el comportamiento esperado.
+8. **Documentación:** se registraron los hallazgos, las modificaciones y las evidencias para facilitar futuras revisiones.
+
+Estas actividades permiten incorporar la mejora continua al desarrollo del proyecto, facilitando que los problemas identificados sean documentados, priorizados, corregidos y verificados antes de incorporar los cambios a la versión principal del sistema.
+
+### 7.4 Conclusión final
+
+La auditoría realizada sobre la funcionalidad **Tomar orden** permitió identificar aspectos que pueden afectar la eficiencia, confiabilidad y mantenibilidad del sistema Reparatodo.
+
+La intervención seleccionada busca mejorar el orden de ejecución de las validaciones, evitando consultas innecesarias cuando los datos recibidos son inválidos. Asimismo, se identificaron riesgos relacionados con la concurrencia y el control de estados que deberán abordarse en futuras mejoras.
+
+En conclusión, este proceso contribuye al fortalecimiento de la calidad del software y al cumplimiento del propósito principal de Reparatodo: mejorar la gestión de las reparaciones, reducir los tiempos de atención y ofrecer mayor transparencia y trazabilidad a los clientes.
