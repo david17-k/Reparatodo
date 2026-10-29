@@ -114,5 +114,151 @@ Sin embargo, durante la auditoría se identificaron aspectos que requieren revis
 - La verificación de que un técnico y una orden estén disponibles podría requerir protección adicional ante solicitudes simultáneas.
 - No se observa en el código revisado una validación completa de las transiciones permitidas entre estados del técnico y de la orden.
 
-Estos aspectos se analizarán con mayor detalle en los hallazgos de auditoría y las propuestas de refactorización.
+Estos aspectos se analizarán con mayor detalle en los hallazgos de auditoría y las propuestas de refactorización.**
+## 3. Hallazgos de auditoría
 
+Se identificaron tres hallazgos relacionados con la validación de datos, la asignación de órdenes y el control de los estados del técnico. Estos hallazgos se seleccionaron por su posible impacto en la confiabilidad y el correcto funcionamiento de la funcionalidad **Tomar orden**.
+
+### 3.1 Hallazgo H-03: Validación de datos después de las consultas
+
+- **ID:** H-03
+- **Ruta:** `src/main/java/Reparatodo/Repa/Bussines/Service/Impl/TecnicoServiceImpl.java` (ajustar según la ubicación real del archivo).
+- **Método:** `actualizarTecnico(Long id, ActualizarTecnico actualizarTecnico)`.
+- **Líneas:** [Completar con las líneas exactas del método].
+- **Evidencia:**
+
+```java
+if (!tecnicoDAO.findById(id).isPresent()) {
+    throw new TecnicoNoEncontradoException(id);
+}
+
+if (tecnicoDAO.existsByOrdenEntity(id)) {
+    throw new TecnicoOrdenAsignada(id);
+}
+
+if (ordenService.tecnicoAsignado(actualizarTecnico.getIdOrden())) {
+    throw new OrdenConTecnicoAsignadoException(id);
+}
+
+validarDatos(actualizarTecnico);
+```
+
+- **Categoría:** Oportunidad de mejora / posible defecto funcional por validar los datos después de ejecutar consultas.
+- **Justificación:** La validación de los datos de entrada se realiza después de consultar la existencia del técnico y las asignaciones. Es conveniente validar primero los datos necesarios para evitar ejecutar consultas con información inválida.
+- **Consecuencia:** Se pueden realizar consultas innecesarias y generar errores o resultados poco claros cuando los datos recibidos no cumplen las condiciones esperadas. No se ha demostrado todavía un fallo funcional reproducible.
+
+### 3.2 Hallazgo H-09: Riesgo de asignación simultánea de órdenes
+
+- **ID:** H-09
+- **Ruta:** `src/main/java/Reparatodo/Repa/Bussines/Service/Impl/TecnicoServiceImpl.java` (ajustar según la ubicación real del archivo).
+- **Método:** `actualizarTecnico(Long id, ActualizarTecnico actualizarTecnico)`.
+- **Líneas:** [Completar con las líneas de las comprobaciones de asignación y actualización].
+- **Evidencia:**
+
+```java
+if (tecnicoDAO.existsByOrdenEntity(id)) {
+    throw new TecnicoOrdenAsignada(id);
+}
+
+if (ordenService.tecnicoAsignado(actualizarTecnico.getIdOrden())) {
+    throw new OrdenConTecnicoAsignadoException(id);
+}
+
+TecnicoDTO actualizarTecnicos =
+        tecnicoDAO.actulizarTecnico(id, actualizarTecnico)
+                .orElseThrow(() ->
+                        new RuntimeException("Error al actualizar el tecnico"));
+```
+
+- **Categoría:** Riesgo arquitectónico.
+- **Justificación:** El sistema verifica que el técnico no tenga otra orden y que la orden solicitada no esté asignada. Sin embargo, las consultas de validación y la actualización se ejecutan como operaciones separadas. Si dos solicitudes llegan simultáneamente, ambas podrían superar las comprobaciones antes de que alguna guarde los cambios.
+- **Consecuencia:** Existe el riesgo de que se produzcan asignaciones inconsistentes, por ejemplo, que una misma orden termine asociada a más de un técnico o que un técnico reciba más de una orden. Este comportamiento debe comprobarse mediante pruebas de concurrencia y revisión de las restricciones de la base de datos.
+
+### 3.3 Hallazgo H-11: Validación incompleta de estados
+
+- **ID:** H-11
+- **Ruta:** `src/main/java/Reparatodo/Repa/Bussines/Service/Impl/TecnicoServiceImpl.java` (ajustar según la ubicación real del archivo).
+- **Método:** `actualizarTecnico(Long id, ActualizarTecnico actualizarTecnico)` y `validarDatos(ActualizarTecnico actualizarTecnico)`.
+- **Líneas:** [Completar con las líneas de ambos métodos].
+- **Evidencia:**
+
+```java
+private void validarDatos(ActualizarTecnico actualizarTecnico) {
+    if (actualizarTecnico.getIdOrden() == null
+            || actualizarTecnico.getIdOrden() <= 0) {
+        // Validación del identificador de la orden.
+    }
+}
+```
+
+La validación mostrada comprueba que el identificador de la orden sea válido, pero en el fragmento revisado no se observa una comprobación de las transiciones permitidas entre los estados del técnico y de la orden.
+
+- **Categoría:** Riesgo arquitectónico.
+- **Justificación:** La funcionalidad cambia el estado del técnico a `OCUPADO`, pero es necesario verificar que las reglas de transición de estados se encuentren centralizadas y se apliquen correctamente. No se puede afirmar que la validación esté ausente en todo el sistema sin revisar los demás servicios y componentes.
+- **Consecuencia:** Si no existen controles adicionales, podrían permitirse transiciones de estado no válidas o inconsistencias entre el estado del técnico y el de la orden.
+
+### 3.4 Resumen de hallazgos
+
+| ID | Hallazgo | Categoría |
+|---|---|---|
+| H-01 | Validación de datos después de las consultas. | Oportunidad de mejora / posible defecto funcional. |
+| H-02 | Riesgo de asignación simultánea de órdenes. | Riesgo arquitectónico. |
+| H-03 | Validación incompleta de estados en el código revisado. | Riesgo arquitectónico. |
+
+Los hallazgos identificados representan aspectos que deben analizarse y verificarse antes de realizar cambios en el código. Su clasificación no significa que todos sean defectos funcionales confirmados.
+## 4. Priorización de hallazgos
+
+Para establecer el orden de atención de los hallazgos se utiliza una escala de valoración de 1 a 3, considerando el impacto que puede tener cada problema, el riesgo asociado y el esfuerzo necesario para implementar una solución.
+
+### 4.1 Criterios de evaluación
+
+| Valor | Impacto | Riesgo | Esfuerzo |
+|---|---|---|---|
+| 1 | Bajo | Bajo | Bajo |
+| 2 | Medio | Medio | Medio |
+| 3 | Alto | Alto | Alto |
+
+En el esfuerzo, una puntuación mayor representa una solución más compleja o que requiere más trabajo.
+
+### 4.2 Matriz de priorización
+
+| ID | Hallazgo | Impacto | Riesgo | Esfuerzo |
+|---|---|---:|---:|---:|
+| H-03 | Validación de datos después de las consultas. | 2 | 2 | 1 |
+| H-09 | Riesgo de asignación simultánea de órdenes. | 3 | 3 | 3 |
+| H-11 | Validación incompleta de estados. | 3 | 2 | 2 |
+
+### 4.3 Justificación de las puntuaciones
+
+**H-03: Validación de datos después de las consultas**
+
+- **Impacto: 2 (medio).** Puede ocasionar consultas innecesarias y un manejo menos claro de los datos inválidos.
+- **Riesgo: 2 (medio).** Puede afectar el comportamiento del proceso cuando se reciben identificadores incorrectos.
+- **Esfuerzo: 1 (bajo).** La mejora consiste principalmente en trasladar la llamada a `validarDatos()` al inicio del método `actualizarTecnico()`.
+- **Razón de selección:** Es un cambio localizado, sencillo de implementar y de verificar mediante pruebas unitarias.
+
+**H-09: Riesgo de asignación simultánea de órdenes**
+
+- **Impacto: 3 (alto).** Una asignación inconsistente puede afectar directamente la gestión de las órdenes y los técnicos.
+- **Riesgo: 3 (alto).** Dos solicitudes simultáneas podrían superar las comprobaciones antes de que se actualicen los datos.
+- **Esfuerzo: 3 (alto).** Puede requerir transacciones, bloqueos, restricciones en la base de datos y pruebas de concurrencia.
+- **Razón de selección:** Es un hallazgo importante porque compromete la integridad de la información, aunque requiere un análisis técnico más profundo antes de implementar una solución.
+
+**H-11: Validación incompleta de estados**
+
+- **Impacto: 3 (alto).** Una transición incorrecta podría generar inconsistencias en el proceso de reparación.
+- **Riesgo: 2 (medio).** No se ha confirmado que el sistema permita transiciones inválidas, ya que las validaciones podrían existir en otros componentes.
+- **Esfuerzo: 2 (medio).** Requiere revisar las reglas de negocio, los estados existentes y los servicios que modifican las órdenes y los técnicos.
+- **Razón de selección:** Es necesario verificar que las transiciones de estado sean coherentes y estén controladas antes de ampliar o modificar el flujo de asignación.
+
+### 4.4 Razón de selección del hallazgo para refactorización
+
+Se selecciona el hallazgo **H-03** como primera refactorización debido a que presenta un esfuerzo bajo y permite mejorar el orden de ejecución de las validaciones sin modificar la arquitectura general del sistema.
+
+La solución consiste en ejecutar `validarDatos(actualizarTecnico)` antes de realizar las consultas de existencia y asignación. De esta manera, se evita consultar información utilizando datos que todavía no han sido validados.
+
+Los hallazgos H-09 y H-11 se mantienen como aspectos pendientes de análisis y verificación, debido a que requieren revisar otros componentes y realizar pruebas adicionales.
+
+La priorización no significa que H-03 sea el hallazgo de mayor impacto, sino que representa el cambio más viable para iniciar el proceso de refactorización.
+
+### 5. Intervencion ##
